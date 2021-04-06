@@ -1,0 +1,23 @@
+---
+titre: Lili et la graine magique
+date: 2021-04-01
+collection: Pomme d'api
+numéro: 662
+
+ingrédients:
+    - type: son
+      nom: histoire_principale
+      format: mp3
+      url: https://audio.ausha.co/bllDMIzvMGL2.mp3
+      md5sum: 716c706e079a62e1c4fcc4a0e644cb62 
+
+contenu:
+    - type: titre
+      fichier_source: histoire_principale
+      début: 0:57
+      fin: 1:00
+    - type: histoire
+      fichier_source: histoire_principale
+      début: 1:00
+      fin: ~
+...
