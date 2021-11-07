@@ -1,17 +1,19 @@
 extern crate image;
 
-use std::io;
-use std::error::Error;
-use image::io::Reader as ImageReader;
+use image::GenericImageView;
 
 fn main() {
     println!("Converting image to rgb565 format");
-    test_load_img().unwrap();
+    test_load_img();
+    println!("Ok converted");
 }
 
 fn test_load_img() {
-    let img = ImageReader::open("colere_sven.png")?.decode()?;
-    img.save("colere_sven.jpg")?;
+    println!("Open colere_sven.png");
+    let img = image::open("colere_sven.png").unwrap();
+    println!("dimensions {:?}", img.dimensions());
+    println!("{:?}", img.color());
+    img.save("colere_sven.jpg").unwrap();
 }
 
 
