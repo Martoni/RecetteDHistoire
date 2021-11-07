@@ -1,5 +1,5 @@
 extern crate yaml_rust;
-use yaml_rust::{YamlLoader, YamlEmitter};
+use yaml_rust::{YamlLoader};
 use std::fs;
 
 fn main() {
