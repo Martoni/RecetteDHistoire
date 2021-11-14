@@ -1,0 +1,18 @@
+--
+titre: Un voyage extraordinaire
+date: 2019-07-01
+collection: Pomme d'api
+numéro: 559
+
+ingrédients:
+    - type: image
+      nom: dos 
+      url: https://www.belleshistoires.com/wp-content/uploads/sites/35/2019/06/BHIN0559-COUV_OK.jpg
+      dimension: 588x665
+      format: jpeg
+      md5sum: eface513b19967ccc307f30f016a07b0
+
+
+recette:
+    - lecteur: raconteur v0.1
+      écran: dos 
