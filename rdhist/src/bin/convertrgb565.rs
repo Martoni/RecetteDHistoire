@@ -1,25 +1,26 @@
 extern crate image;
+
+use std::env;
 use std::fs::File;
 use std::io::Write;
 
 use image::GenericImageView;
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+    println!("debug: args {:?}", args);
     println!("Converting image to rgb565 format");
-    test_load_img();
+    test_load_img(&args[1]);
     println!("Ok converted");
 }
 
-fn test_load_img() {
-    println!("Open colere_sven.png");
-    let img = image::open("colere_sven.png").unwrap();
+fn test_load_img(imgpath: &String) {
+    println!("Open {:?}", imgpath);
+    let img = image::open(imgpath).unwrap();
     let (wimg, himg) = img.dimensions();
     println!("{:?}", img.color());
-    img.save("colere_sven.jpg").unwrap();
-
     let imgrgb = img.into_rgb8();
     println!("width {:?}, height {:?}", wimg, himg);
-
 
     /* convert rgb888 24Bits to rgb565 16Bits values */
     let mut outfile = File::create("rgb565.bin").unwrap();
