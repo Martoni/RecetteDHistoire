@@ -18,15 +18,20 @@ fn test_load_img() {
     img.save("colere_sven.jpg").unwrap();
 
     let imgrgb = img.into_rgb8();
-
-    for pix in imgrgb.pixels() {
-        println!("Pixel {:?} -> {:x}", pix, pix[0]);
-    }
-
     println!("width {:?}, height {:?}", wimg, himg);
 
-    let mut outfile = File::create("output.bin").unwrap();
-    outfile.write(&[0x40u8]).unwrap();
+
+    /* convert rgb888 24Bits to rgb565 16Bits values */
+    let mut outfile = File::create("rgb565.bin").unwrap();
+    for pix in imgrgb.pixels() {
+        println!("Pixel {:?} -> {:x}", pix, pix[0]);
+        let pix565: u16 =  (((pix[0] as u16) & 0x00f8) << 8u16)
+                          |(((pix[1] as u16) & 0x00fc) << 3u16)
+                          |(((pix[2] as u16) & 0x00f8) >> 3u16);
+        let hpix565: u8 = (pix565 >> 8) as u8;
+        let lpix565: u8 = (pix565 & 0x00ff) as u8;
+        outfile.write(&[hpix565, lpix565]).unwrap();
+    }
 }
 
 
