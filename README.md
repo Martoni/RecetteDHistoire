@@ -12,7 +12,7 @@ formater pour les télécharger dans la boîte à histoire.
 
 Pour le moment deux boîtes à histoires sont visées par `RecetteDHistoire` :
 
-- [Le raconteur](https://www.fabienm.eu/raconteur): Boîte à histoire «faites
+- [Le raconteur](http://www.fabienm.eu/raconteur): Boîte à histoire «faites
   maison» à partir d'une [Longan Nano](http://www.fabienm.eu/wordpress/?p=1336)
   et d'un lecteur mp3
   [DFR0299](https://wiki.dfrobot.com/DFPlayer_Mini_SKU_DFR0299).
