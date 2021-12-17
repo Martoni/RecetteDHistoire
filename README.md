@@ -7,7 +7,7 @@ Les sources, que l'on trouve dans le répertoire `recettes`, sont décrites dans
 un fichier de «recette» au format yaml.
 
 `RecetteDHistoire` va ensuite se charger de télécharger les média (s'ils se
-trouve sur le web, «ripper» le cd si c'est un livre avec CD audio) puis les
+trouvent sur le web, «ripper» le cd si c'est un livre avec CD audio) puis les
 formater pour les télécharger dans la boîte à histoire.
 
 Pour le moment deux boîtes à histoires sont visées par `RecetteDHistoire` :
