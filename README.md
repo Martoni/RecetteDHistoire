@@ -12,14 +12,14 @@ formater pour les télécharger dans la boîte à histoire.
 
 Pour le moment deux boîtes à histoires sont visées par `RecetteDHistoire` :
 
-- [Le raconteur](http://www.fabienm.eu/raconteur): Boîte à histoire «faites
+- [Le raconteur](http://www.fabienm.eu/raconteur): Boîte à histoire «faite
   maison» à partir d'une [Longan Nano](http://www.fabienm.eu/wordpress/?p=1336)
   et d'un lecteur mp3
   [DFR0299](https://wiki.dfrobot.com/DFPlayer_Mini_SKU_DFR0299).
 - Clef USB: Beaucoup de «minichaîne» audio sont capable de lire les mp3 de nos
   jours, la clef USB peut-être vue comme une boîte à histoire générique.
 
-À plus long terme, il serait intéressant d'inclure les boîtes à histoire
+À plus long terme, il serait intéressant d'inclure les boîtes à histoires
 [LUNII](https://lunii.com/fr-fr/) et [Merlin](https://www.hello-merlin.com/).
 
 # Compilation et installation
