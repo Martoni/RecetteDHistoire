@@ -46,8 +46,11 @@ fn main() {
                                     "découpe le mp3 pour en extraire ",
                                     "une partie (temps en secondes)")));
 
-    let mut help = Vec::new();
-    app.write_long_help(&mut help).unwrap();
+    let mut helpmsg = Vec::new();
+    app.write_long_help(&mut helpmsg)
+                    .expect("Impossible d'écrire le message d'aide");
+    let helpmsg = str::from_utf8(&helpmsg)
+                    .expect("Impossible de convertir le message en utf8");
 
     let matches = app.get_matches();
 
@@ -57,7 +60,7 @@ fn main() {
 
     let finputs = matches.values_of("finput");
     let foutput = matches.value_of("foutput")
-        .expect(&format!("\nErreur: Donnez un nom de fichier de sortie (-o)\n\n{}", str::from_utf8(&help).unwrap()));
+        .expect(&format!("\nErreur: Donnez un nom de fichier de sortie (-o)\n\n{}", helpmsg));
 
     let concat = matches.is_present("concat");
 }
