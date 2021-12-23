@@ -35,3 +35,10 @@ En plus de l'exécutable principale, quelques utilitaires sont fournis avec le p
 Cet utilitaire se charge de convertir des images aux formats habituels comme le
 `PNG`/`JPEG`/... en un format binaire RGB565 lisible par la Longan Nano pour
 s'afficher sur l'écran de la carte.
+
+## ciseauxmp3
+
+Cet outil découpe et assemble des fichiers musicaux au format mp3. L'exécutable
+utilise la ligne de commande pour lancer les utilitaires
+[cat](http://www.linuxcertif.com/man/1/cat/) et [ffmpeg](https://ffmpeg.org/),
+il est donc nécessaire de les avoir installés pour l'utiliser.
