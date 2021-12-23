@@ -1,4 +1,5 @@
 extern crate image;
+extern crate clap;
 
 use std::env;
 use std::fs::File;
@@ -42,6 +43,7 @@ fn usages() {
 }
 
 fn main() {
+
     let args: Vec<String> = env::args().collect();
     if args.len() != 2 {
         usages();
