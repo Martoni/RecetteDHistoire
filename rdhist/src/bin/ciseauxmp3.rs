@@ -58,9 +58,25 @@ fn main() {
         0 => panic!("Donnez au moins un fichier source"),
         a => a};
 
-    let finputs = matches.values_of("finput");
+    let finputs = matches.values_of("finput")
+        .expect("Erreur: impossible de récupérer les noms des fichiers d'entrée");
+    let finputsv: Vec<&str> = finputs.collect();
+
     let foutput = matches.value_of("foutput")
-        .expect(&format!("\nErreur: Donnez un nom de fichier de sortie (-o)\n\n{}", helpmsg));
+        .expect(&format!(
+        "\nErreur: Donnez un nom de fichier de sortie (-o)\n\n{}", helpmsg));
 
     let concat = matches.is_present("concat");
+    if concat {
+        if inputs_num < 2 {
+            panic!(format!("\nErreur: Donnez au moins deux fichiers d'entrées\n\n{}", helpmsg));
+        }
+        let cmdret = Command::new("cat")
+                                .args(finputsv)
+                                .arg(">")
+                                .arg(foutput)
+                                .output()
+                                .expect("La commande 'cat' a échouée");
+        println!("Debug {:?} cmdret", cmdret);
+    }
 }
