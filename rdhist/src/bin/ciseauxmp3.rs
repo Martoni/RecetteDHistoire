@@ -41,11 +41,12 @@ fn main() {
                         .arg(Arg::with_name("split")
                                 .short("s")
                                 .long("split")
-                                .value_name("SPLIT")
-                                .takes_value(false)
+                                .value_name("DEBUT:DUREE")
+                                .takes_value(true)
                                 .help(concat!(
                                     "découpe le mp3 pour en extraire ",
-                                    "une partie (temps en secondes)")));
+                                    "une partie (temps en secondes",
+                                    ")")));
 
     let mut helpmsg = Vec::new();
     app.write_long_help(&mut helpmsg)
@@ -71,6 +72,7 @@ fn main() {
                         .expect(&format!("Impossible de créer le fichier {:?}", foutname));
 
     let concat = matches.is_present("concat");
+    let split = matches.is_present("split");
     if concat {
         if inputs_num < 2 {
             panic!(format!("\nErreur: Donnez au moins deux fichiers d'entrées\n\n{}", helpmsg));
@@ -80,6 +82,12 @@ fn main() {
                                 .stdout(foutput)
                                 .output()
                                 .expect("La commande 'cat' a échouée");
+    } else if split {
+        if inputs_num != 1 {
+            panic!(format!("\nErreur: Donnez un seul nom de fichier en entrée\n\n{}", helpmsg));
+        }
+    } else {
+            panic!(format!("\nErreur: Voulez vous concatener (-c) ou découper (-s) ?\n\n{}", helpmsg));
     }
     println!("Fichier {:?} créé", foutname);
 }
