@@ -1,7 +1,6 @@
 extern crate image;
 extern crate clap;
 
-use std::env;
 use clap::{Arg, App};
 use std::fs::File;
 use std::io::Write;

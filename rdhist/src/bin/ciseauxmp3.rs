@@ -3,6 +3,7 @@ extern crate clap;
 use clap::{Arg, App};
 use std::process::Command;
 use std::str;
+use std::fs::File;
 
 /*
 concatenation:
@@ -62,21 +63,23 @@ fn main() {
         .expect("Erreur: impossible de récupérer les noms des fichiers d'entrée");
     let finputsv: Vec<&str> = finputs.collect();
 
-    let foutput = matches.value_of("foutput")
+    let foutname = matches.value_of("foutput")
         .expect(&format!(
         "\nErreur: Donnez un nom de fichier de sortie (-o)\n\n{}", helpmsg));
+
+    let foutput = File::create(&foutname)
+                        .expect(&format!("Impossible de créer le fichier {:?}", foutname));
 
     let concat = matches.is_present("concat");
     if concat {
         if inputs_num < 2 {
             panic!(format!("\nErreur: Donnez au moins deux fichiers d'entrées\n\n{}", helpmsg));
         }
-        let cmdret = Command::new("cat")
+        let _cmdret = Command::new("cat")
                                 .args(finputsv)
-                                .arg(">")
-                                .arg(foutput)
+                                .stdout(foutput)
                                 .output()
                                 .expect("La commande 'cat' a échouée");
-        println!("Debug {:?} cmdret", cmdret);
     }
+    println!("Fichier {:?} créé", foutname);
 }
