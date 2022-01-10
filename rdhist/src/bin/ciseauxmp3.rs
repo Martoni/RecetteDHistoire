@@ -19,27 +19,27 @@ fn main() {
                         .version("0.1")
                         .author("Fabien Marteau <mail@fabienm.eu>")
                         .about("Raconte des histoires")
-                        .arg(Arg::with_name("finput")
-                                .short("i")
+                        .arg(Arg::new("finput")
+                                .short('i')
                                 .long("input")
-                                .multiple(true)
+                                .multiple_occurrences(true)
                                 .value_name("FINPUT")
                                 .help("fichier mp3 d'entrée")
                                 .takes_value(true))
-                        .arg(Arg::with_name("foutput")
-                                .short("o")
+                        .arg(Arg::new("foutput")
+                                .short('o')
                                 .long("output")
                                 .value_name("FOUTPUT")
                                 .help("nom du fichier de sortie")
                                 .takes_value(true))
-                        .arg(Arg::with_name("concat")
-                                .short("c")
+                        .arg(Arg::new("concat")
+                                .short('c')
                                 .long("concat")
                                 .value_name("CONCAT")
                                 .takes_value(false)
                                 .help("Assemble les fichiers en un seul"))
-                        .arg(Arg::with_name("split")
-                                .short("s")
+                        .arg(Arg::new("split")
+                                .short('s')
                                 .long("split")
                                 .value_name("DEBUT:DUREE")
                                 .takes_value(true)
@@ -75,7 +75,7 @@ fn main() {
     let split = matches.is_present("split");
     if concat {
         if inputs_num < 2 {
-            panic!(format!("\nErreur: Donnez au moins deux fichiers d'entrées\n\n{}", helpmsg));
+            panic!("\nErreur: Donnez au moins deux fichiers d'entrées\n\n{}", helpmsg);
         }
         let _cmdret = Command::new("cat")
                                 .args(finputsv)
@@ -84,10 +84,10 @@ fn main() {
                                 .expect("La commande 'cat' a échouée");
     } else if split {
         if inputs_num != 1 {
-            panic!(format!("\nErreur: Donnez un seul nom de fichier en entrée\n\n{}", helpmsg));
+            panic!("\nErreur: Donnez un seul nom de fichier en entrée\n\n{}", helpmsg);
         }
     } else {
-            panic!(format!("\nErreur: Voulez vous concatener (-c) ou découper (-s) ?\n\n{}", helpmsg));
+            panic!("\nErreur: Voulez vous concatener (-c) ou découper (-s) ?\n\n{}", helpmsg);
     }
     println!("Fichier {:?} créé", foutname);
 }
