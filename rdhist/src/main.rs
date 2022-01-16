@@ -3,8 +3,9 @@ extern crate yaml_rust;
 
 use clap::{Arg, App};
 use yaml_rust::{YamlLoader};
-use std::fs;
-use std::str;
+use std::{fs, str, process};
+
+use rdhist::rdmain;
 
 fn main() {
 
@@ -27,16 +28,16 @@ fn main() {
 
     let matches = app.get_matches();
 
-    if matches.is_present("listrecette") {
-        println!("TODO: lister les recettes disponibles");
+
+    let cfg = if matches.is_present("listrecette") {
+        rdmain::Config::new().set_cmdlist()
     } else {
-        /* XXX some try */
-        let filename = String::from("recettes/grande_histoire_pomme_dapi/2021_04_Lili_et_la_graine_magique.rdist");
-        println!("Recettes D'Histoires");
-        println!("Recette : {}", filename);
-        let contents = fs::read_to_string(filename)
-            .expect("Something went wrong reading the file");
-        let docs = YamlLoader::load_from_str(&contents).unwrap();
-        println!("{:?}", docs);
+        rdmain::Config::new()
+    };
+
+    if let Err(e) = rdmain::run(cfg) {
+        eprintln!("Erreur durant l'exécution du programme: {}", e);
+        process::exit(1);
     }
+
 }
