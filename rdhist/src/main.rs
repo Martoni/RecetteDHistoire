@@ -28,7 +28,6 @@ fn main() {
 
     let matches = app.get_matches();
 
-
     let cfg = if matches.is_present("listrecette") {
         rdmain::Config::new().set_cmdlist()
     } else {
