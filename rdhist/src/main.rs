@@ -2,8 +2,8 @@ extern crate clap;
 extern crate yaml_rust;
 
 use clap::{Arg, App};
-use yaml_rust::{YamlLoader};
-use std::{fs, str, process};
+//use yaml_rust::{YamlLoader};
+use std::{str, process};
 
 use rdhist::rdmain;
 
@@ -13,8 +13,8 @@ fn main() {
                     .version("0.1")
                     .author("Fabien Marteau <mail@fabienm.eu>")
                     .about("Tous les ustensiles nécessaire pour cuisiner des histoires")
-                    .arg(Arg::with_name("listrecette")
-                         .short("l")
+                    .arg(Arg::new("listrecette")
+                         .short('l')
                          .long("listrecette")
                          .value_name("LISTRECETTE")
                          .help("Liste les recettes disponibles")
