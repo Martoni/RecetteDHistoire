@@ -9,27 +9,40 @@ const CONFIG_DIR_PATH: &str = ".rdhist";
 const CONFIG_DIR_RECETTES: &str = "recettes";
 const CONFIG_DIR_CAGETTES: &str = "cagettes";
 const CONFIG_DIR_SORTIES: &str = "sorties";
-
+const RDHIST_EXT: &str = "rdhist";
 
 pub struct Config {
     pub path: String,
-    pub cmdlist: bool
+    pub cmdlist: bool,
+    pub recette_filename: String
 }
 
 impl Config {
-    pub fn new() -> Config {
+    pub fn new() -> Result<Config, Box<dyn Error>> {
         /* ouch */
         let home_dir = dirs::home_dir().unwrap().to_str().unwrap().to_owned();
 
-        Config {
+        let conf = Config {
             path: home_dir + "/" + &CONFIG_DIR_PATH,
-            cmdlist: false
-        }
+            cmdlist: false,
+            recette_filename: "None".to_string()
+        };
+
+        Ok(conf)
     }
 
     pub fn set_cmdlist(mut self) -> Self {
-        self.cmdlist = true;
-        self
+        Config {
+            cmdlist: true,
+            ..self
+        }
+    }
+
+    pub fn set_recette_filename(mut self, recette_filename: String) -> Self {
+        Config {
+            recette_filename,
+            ..self
+        }
     }
 }
 
@@ -49,8 +62,11 @@ pub fn run(cfg: Config) -> Result<Config, Box<dyn Error>> {
                 println!("{}", file.path().display());
             }
         }
-        Err("TODO: lister les recettes disponibles".into())
-    } else {
         Ok(cfg)
+    } else if cfg.recette_filename != "None" {
+        print!("TODO: Vérifier puis allez chercher les ingrédients de {:?}", cfg.recette_filename);
+        Ok(cfg)
+    } else {
+        Err("Donnez au moins une option".into())
     }
 }

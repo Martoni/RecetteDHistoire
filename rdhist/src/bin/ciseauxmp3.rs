@@ -69,7 +69,7 @@ fn main() {
         "\nErreur: Donnez un nom de fichier de sortie (-o)\n\n{}", helpmsg));
 
     let foutput = File::create(&foutname)
-                        .expect(&format!("Impossible de créer le fichier {:?}", foutname));
+        .expect(&format!("Impossible de créer le fichier {:?}", foutname));
 
     let concat = matches.is_present("concat");
     let split = matches.is_present("split");
