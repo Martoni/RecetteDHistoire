@@ -5,6 +5,8 @@ use std::error::Error;
 use std::result::Result::Err;
 use std::fs;
 
+pub mod recette;
+
 const CONFIG_DIR_PATH: &str = ".rdhist";
 const CONFIG_DIR_RECETTES: &str = "recettes";
 const CONFIG_DIR_CAGETTES: &str = "cagettes";
@@ -31,14 +33,14 @@ impl Config {
         Ok(conf)
     }
 
-    pub fn set_cmdlist(mut self) -> Self {
+    pub fn set_cmdlist(self) -> Self {
         Config {
             cmdlist: true,
             ..self
         }
     }
 
-    pub fn set_recette_filename(mut self, recette_filename: String) -> Self {
+    pub fn set_recette_filename(self, recette_filename: String) -> Self {
         Config {
             recette_filename,
             ..self

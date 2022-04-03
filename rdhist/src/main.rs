@@ -1,9 +1,7 @@
 extern crate clap;
-extern crate yaml_rust;
 extern crate main_error;
 
 use clap::{Arg, App};
-//use yaml_rust::{YamlLoader};
 use std::{str, process};
 use main_error::MainError;
 
