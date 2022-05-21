@@ -54,4 +54,8 @@ impl Recette {
         let f = std::fs::File::open(&self.path_recette_filename)?;
         Ok(self)
     }
+
+    pub fn display(self) {
+       println!("{}", self.path_recette_filename);
+    }
 }

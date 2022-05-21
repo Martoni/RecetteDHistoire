@@ -7,6 +7,8 @@ use std::fs;
 
 pub mod recette;
 
+use recette::Recette;
+
 const CONFIG_DIR_PATH: &str = ".rdhist";
 const CONFIG_DIR_RECETTES: &str = "recettes";
 const CONFIG_DIR_CAGETTES: &str = "cagettes";
@@ -33,6 +35,7 @@ impl Config {
         Ok(conf)
     }
 
+    /* set list command to true */
     pub fn set_cmdlist(self) -> Self {
         Config {
             cmdlist: true,
@@ -46,23 +49,33 @@ impl Config {
             ..self
         }
     }
-}
 
-pub fn run(cfg: Config) -> Result<Config, Box<dyn Error>> {
-    if cfg.cmdlist {
+    pub fn get_files_recettes(&self) -> Result<Vec<Recette>, Box<dyn Error>> {
+        let mut recettelist: Vec<Recette> = vec![];
         for file in fs::read_dir(format!("{}/{}",
-                                        &cfg.path,
+                                        &self.path,
                                         CONFIG_DIR_RECETTES))? {
             let file = file?;
             let path = file.path();
             if path.is_dir() {
                 for subfile in fs::read_dir(path)? {
-                    println!("{}", subfile?.path().display());
+                    let rfilepath = subfile?.path().display().to_string();
+                    recettelist.push(Recette::new(rfilepath)?);
                 }
-
             } else {
-                println!("{}", file.path().display());
+                let rfilepath = file.path().display().to_string();
+                recettelist.push(Recette::new(rfilepath)?);
             }
+        }
+        Ok(recettelist)
+    }
+}
+
+pub fn run(cfg: Config) -> Result<Config, Box<dyn Error>> {
+    if cfg.cmdlist {
+        let list_recettes = cfg.get_files_recettes()?;
+        for recette in list_recettes {
+            recette.display();
         }
         Ok(cfg)
     } else if cfg.recette_filename != "None" {
