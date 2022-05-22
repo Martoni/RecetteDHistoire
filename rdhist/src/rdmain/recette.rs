@@ -47,14 +47,17 @@ impl Recette {
     }
 }
 
+pub fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
+}
+
 pub fn recette_ext_check(filename: &String) -> bool {
     let vecfile = filename.split(".").collect::<Vec<&str>>();
-    let ext = vecfile.last().expect("Pas d'extensions");
-   
+    let ext = *vecfile.last().expect("Pas d'extensions");
 
-    if ext == &"rdhist" {
+    if ext.eq("rdhist") {
         true
     } else {
         false
-        }
+    }
 }
