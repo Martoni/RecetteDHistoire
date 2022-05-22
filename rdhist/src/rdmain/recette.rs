@@ -33,9 +33,9 @@ pub struct Recette {
     date: String,
     collection: String,
     numéro: u32,
-    codebarre: u64,
+    codebarre: Option<u64>,
     ingrédients: Vec<Ingredients>,
-    opérations: Vec<Opération>
+    opérations: Option<Vec<Opération>>
 }
 
 
