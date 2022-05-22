@@ -60,11 +60,17 @@ impl Config {
             if path.is_dir() {
                 for subfile in fs::read_dir(path)? {
                     let rfilepath = subfile?.path().display().to_string();
-                    recettelist.push(Recette::new(rfilepath)?);
+                    if recette::recette_ext_check(&rfilepath) {
+                        println!("file {}", &rfilepath);
+                        recettelist.push(Recette::new(rfilepath)?);
+                    }
                 }
             } else {
                 let rfilepath = file.path().display().to_string();
-                recettelist.push(Recette::new(rfilepath)?);
+                if recette::recette_ext_check(&rfilepath) {
+                    println!("file {}", &rfilepath);
+                    recettelist.push(Recette::new(rfilepath)?);
+                    }
             }
         }
         Ok(recettelist)
@@ -75,7 +81,7 @@ pub fn run(cfg: Config) -> Result<Config, Box<dyn Error>> {
     if cfg.cmdlist {
         let list_recettes = cfg.get_files_recettes()?;
         for recette in list_recettes {
-            recette.display();
+            println!("{:?}", &recette);
         }
         Ok(cfg)
     } else if cfg.recette_filename != "None" {

@@ -1,21 +1,20 @@
 extern crate serde;
 
 use std::error::Error;
-use std::fs::File;
 use serde::{Deserialize, Serialize};
 use serde_yaml::{self};
 
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Ingredients {
     media_type: String,
     nom: String,
     format: String,
     url: String,
     md5sum: String,
-    dimensions: String
+    dimensions: Option<String>
 }
 
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Opération {
     media_type: String,
     fichier_source: String,
@@ -23,10 +22,13 @@ pub struct Opération {
     fin: String,
 }
 
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Contenus {
     media_type: Vec<Opération>
     }
-pub struct YRecette {
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct Recette {
     titre: String,
     date: String,
     collection: String,
@@ -37,25 +39,22 @@ pub struct YRecette {
 }
 
 
-pub struct Recette {
-    pub path_recette_filename: String
-}
-
 impl Recette {
     pub fn new(filename: String) -> Result<Recette, Box<dyn Error>> {
-        let recette = Recette {
-            path_recette_filename: filename
-        };
-
-        Ok(recette)
+        let rawcontent = std::fs::read_to_string(filename)?;
+        let yrecette = serde_yaml::from_str(&rawcontent)?;
+        Ok(yrecette)
     }
+}
 
-    pub fn load(mut self) -> Result<Recette, Box<dyn Error>> {
-        let f = std::fs::File::open(&self.path_recette_filename)?;
-        Ok(self)
-    }
+pub fn recette_ext_check(filename: &String) -> bool {
+    let vecfile = filename.split(".").collect::<Vec<&str>>();
+    let ext = vecfile.last().expect("Pas d'extensions");
+   
 
-    pub fn display(self) {
-       println!("{}", self.path_recette_filename);
-    }
+    if ext == &"rdhist" {
+        true
+    } else {
+        false
+        }
 }
