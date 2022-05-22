@@ -10,6 +10,7 @@ ingrédients:
     - media_type: son
       nom: histoire_principale
       format: mp3
+      source: url
       url: https://audio.ausha.co/bllDMIzvMGL2.mp3
       md5sum: 716c706e079a62e1c4fcc4a0e644cb62
     - media_type: image

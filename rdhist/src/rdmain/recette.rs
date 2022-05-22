@@ -4,38 +4,48 @@ use std::error::Error;
 use serde::{Deserialize, Serialize};
 use serde_yaml::{self};
 
+use crate::rdmain::RDHIST_EXT;
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub enum SourceTypes {
+    url,
+    cdaudio
+}
+
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Ingredients {
-    media_type: String,
-    nom: String,
-    format: String,
-    url: String,
-    md5sum: String,
-    dimensions: Option<String>
+    pub media_type: String,
+    pub nom: String,
+    pub format: String,
+    pub source: Option<SourceTypes>,
+    pub url: Option<String>,
+    pub md5sum: String,
+    pub dimensions: Option<String>
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Opération {
-    media_type: String,
-    fichier_source: String,
-    début: String,
-    fin: String,
+    pub media_type: String,
+    pub fichier_source: String,
+    pub début: String,
+    pub fin: String,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Contenus {
-    media_type: Vec<Opération>
+    pub media_type: Vec<Opération>
     }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Recette {
-    titre: String,
-    date: String,
-    collection: String,
-    numéro: u32,
-    codebarre: Option<u64>,
-    ingrédients: Vec<Ingredients>,
-    opérations: Option<Vec<Opération>>
+    pub titre: String,
+    pub date: String,
+    pub collection: String,
+    pub numéro: u32,
+    pub codebarre: Option<u64>,
+    pub ingrédients: Vec<Ingredients>,
+    pub opérations: Option<Vec<Opération>>
 }
 
 
@@ -55,7 +65,7 @@ pub fn recette_ext_check(filename: &String) -> bool {
     let vecfile = filename.split(".").collect::<Vec<&str>>();
     let ext = *vecfile.last().expect("Pas d'extensions");
 
-    if ext.eq("rdhist") {
+    if ext.eq(RDHIST_EXT) {
         true
     } else {
         false

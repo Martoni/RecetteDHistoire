@@ -12,7 +12,11 @@ ingrédients:
       dimension: 588x665
       format: jpeg
       md5sum: eface513b19967ccc307f30f016a07b0
-
+    - media_type: son
+      nom: histoire_principale
+      format: cdaudio
+      source: cdaudio
+      md5sum: 98127938703986ea
 
 recette:
     - lecteur: raconteur v0.1
