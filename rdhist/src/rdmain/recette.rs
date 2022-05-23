@@ -6,18 +6,24 @@ use serde_yaml::{self};
 
 use crate::rdmain::RDHIST_EXT;
 
-#[allow(non_camel_case_types)]
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum SourceTypes {
-    url,
-    cdaudio
+    Url,
+    Cdaudio
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub enum FormatTypes {
+    Cdaudio,
+    Mp3,
+    Jpeg
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Ingredients {
     pub media_type: String,
     pub nom: String,
-    pub format: String,
+    pub format: Option<FormatTypes>,
     pub source: Option<SourceTypes>,
     pub url: Option<String>,
     pub md5sum: String,

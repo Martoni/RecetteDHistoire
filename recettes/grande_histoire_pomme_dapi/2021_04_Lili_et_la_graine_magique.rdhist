@@ -9,13 +9,13 @@ codebarre: 3780237705950
 ingrédients:
     - media_type: son
       nom: histoire_principale
-      format: mp3
-      source: url
+      format: Mp3
+      source: Url
       url: https://audio.ausha.co/bllDMIzvMGL2.mp3
       md5sum: 716c706e079a62e1c4fcc4a0e644cb62
     - media_type: image
       nom: illustration podcast
-      format: jpeg
+      format: Jpeg
       dimensions: 400x400
       url: https://image.ausha.co/xjory259Yqm0XpJNJisl7oMzLQ9nno6byoN9bTAL_400x400.jpeg
       md5sum: ee1babfc3264b6912013c0910d2c40c6

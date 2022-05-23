@@ -50,7 +50,7 @@ impl Config {
         }
     }
 
-    pub fn get_files_recettes(&self) -> Result<Vec<Recette>, Box<dyn Error>> {
+    pub fn get_list_files_recettes(&self) -> Result<Vec<Recette>, Box<dyn Error>> {
         let mut recettelist: Vec<Recette> = vec![];
         for file in fs::read_dir(format!("{}/{}",
                                         &self.path,
@@ -73,17 +73,24 @@ impl Config {
         }
         Ok(recettelist)
     }
+
+    pub fn recolter_ingredients(&self, titre_recette: &String) -> Result<bool, Box<dyn Error>> {
+        print!("TODO: Vérifier puis allez chercher les ingrédients de {:?}", titre_recette);
+        Ok(true)
+    }
 }
 
 pub fn run(cfg: Config) -> Result<Config, Box<dyn Error>> {
     if cfg.cmdlist {
-        let list_recettes = cfg.get_files_recettes()?;
+        let list_recettes = cfg.get_list_files_recettes()?;
         for recette in list_recettes {
             println!("{:?}", &recette.titre);
         }
         Ok(cfg)
     } else if cfg.recette_filename != "None" {
-        print!("TODO: Vérifier puis allez chercher les ingrédients de {:?}", cfg.recette_filename);
+        if let Err(e) = cfg.recolter_ingredients(&cfg.recette_filename) {
+          return Err(format!("Impossible de récolter les éléments : {}", e).into())
+        }
         Ok(cfg)
     } else {
         Err("Donnez au moins une option".into())
