@@ -6,6 +6,7 @@ use std::result::Result::Err;
 use std::fs;
 
 pub mod recette;
+pub mod rdhistcli;
 
 use recette::Recette;
 
@@ -93,6 +94,7 @@ pub fn run(cfg: Config) -> Result<Config, Box<dyn Error>> {
         }
         Ok(cfg)
     } else {
+        rdhistcli::rdhistcli();
         Err("Donnez au moins une option".into())
     }
 }
