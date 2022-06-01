@@ -16,18 +16,18 @@ const CONFIG_DIR_CAGETTES: &str = "cagettes";
 const CONFIG_DIR_SORTIES: &str = "sorties";
 const RDHIST_EXT: &str = "rdhist";
 
-pub struct Config {
+pub struct RdMainConfig {
     pub path: String,
     pub cmdlist: bool,
     pub recette_filename: String
 }
 
-impl Config {
-    pub fn new() -> Result<Config, Box<dyn Error>> {
+impl RdMainConfig {
+    pub fn new() -> Result<RdMainConfig, Box<dyn Error>> {
         /* ouch */
         let home_dir = dirs::home_dir().unwrap().to_str().unwrap().to_owned();
 
-        let conf = Config {
+        let conf = RdMainConfig {
             path: home_dir + "/" + &CONFIG_DIR_PATH,
             cmdlist: false,
             recette_filename: "None".to_string()
@@ -38,14 +38,14 @@ impl Config {
 
     /* set list command to true */
     pub fn set_cmdlist(self) -> Self {
-        Config {
+        RdMainConfig {
             cmdlist: true,
             ..self
         }
     }
 
     pub fn set_recette_filename(self, recette_filename: String) -> Self {
-        Config {
+        RdMainConfig {
             recette_filename,
             ..self
         }
@@ -75,13 +75,14 @@ impl Config {
         Ok(recettelist)
     }
 
-    pub fn recolter_ingredients(&self, titre_recette: &String) -> Result<bool, Box<dyn Error>> {
+    pub fn recolter_ingredients(&self, titre_recette: &String)
+                    -> Result<bool, Box<dyn Error>> {
         print!("TODO: Vérifier puis allez chercher les ingrédients de {:?}", titre_recette);
         Ok(true)
     }
 }
 
-pub fn run(cfg: Config) -> Result<Config, Box<dyn Error>> {
+pub fn run(cfg: RdMainConfig) -> Result<RdMainConfig, Box<dyn Error>> {
     if cfg.cmdlist {
         let list_recettes = cfg.get_list_files_recettes()?;
         for recette in list_recettes {
@@ -94,7 +95,10 @@ pub fn run(cfg: Config) -> Result<Config, Box<dyn Error>> {
         }
         Ok(cfg)
     } else {
-        rdhistcli::rdhistcli();
-        Err("Donnez au moins une option".into())
+        match cfg.rdhistcli() {
+            Ok(cfg) => {println!("Au revoir"); Ok(cfg)}
+            _ => Err(format!("Il y a eu un problème avec la ligne de commande").into())
+        }
+
     }
 }

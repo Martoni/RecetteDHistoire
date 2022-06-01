@@ -36,9 +36,9 @@ fn main() -> Result<(), MainError> {
     let matches = app.get_matches();
 
     let cfg = if matches.is_present("listerecettes") {
-        rdmain::Config::new()?.set_cmdlist()
+        rdmain::RdMainConfig::new()?.set_cmdlist()
     } else {
-        rdmain::Config::new()?
+        rdmain::RdMainConfig::new()?
     };
 
     let recolterval = matches.value_of("recolter").unwrap_or("None").to_string();

@@ -5,6 +5,7 @@ authors = ["Fabien Marteau <mail@fabienm.eu>"]
 edition = "2018"
 
 [dependencies]
+getopts = "0.2"
 image = "*"
 itertools = "*"
 clap = "3.0.5"
