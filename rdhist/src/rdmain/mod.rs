@@ -10,10 +10,10 @@ pub mod rdhistcli;
 
 use recette::Recette;
 
-const CONFIG_DIR_PATH: &str = ".rdhist";
-const CONFIG_DIR_RECETTES: &str = "recettes";
-const CONFIG_DIR_CAGETTES: &str = "cagettes";
-const CONFIG_DIR_SORTIES: &str = "sorties";
+const DATA_DIR_PATH: &str = ".local/share/rdhist";
+const DATA_DIR_RECETTES: &str = "recettes";
+const DATA_DIR_CAGETTES: &str = "cagettes";
+const DATA_DIR_SORTIES: &str = "sorties";
 const RDHIST_EXT: &str = "rdhist";
 
 pub struct RdMainConfig {
@@ -28,7 +28,7 @@ impl RdMainConfig {
         let home_dir = dirs::home_dir().unwrap().to_str().unwrap().to_owned();
 
         let conf = RdMainConfig {
-            path: home_dir + "/" + &CONFIG_DIR_PATH,
+            path: home_dir + "/" + &DATA_DIR_PATH,
             cmdlist: false,
             recette_filename: "None".to_string()
         };
@@ -55,7 +55,7 @@ impl RdMainConfig {
         let mut recettelist: Vec<Recette> = vec![];
         for file in fs::read_dir(format!("{}/{}",
                                         &self.path,
-                                        CONFIG_DIR_RECETTES))? {
+                                        DATA_DIR_RECETTES))? {
             let file = file?;
             let path = file.path();
             if path.is_dir() {
