@@ -6,6 +6,7 @@ use std::result::Result::Err;
 use std::fs;
 
 pub mod recette;
+pub mod ingredients;
 pub mod rdhistcli;
 
 use recette::Recette;
@@ -88,7 +89,11 @@ impl RdMainConfig {
     pub fn recolter_ingredients(&self, titre_recette: &String)
                     -> Result<bool, Box<dyn Error>> {
         let rec = self.get_recette_by_title(titre_recette)?;
-        print!("Recette trouvé avec le code barre {:?}\n", rec.codebarre);
+        let cagette_dir = rec.create_cagette_dir(format!("{}/{}", self.path, DATA_DIR_CAGETTES))?;
+        println!("Répertoire {:?} créé pour faire les courses", cagette_dir);
+        for ingredient in rec.ingrédients.iter() {
+            println!("nom: {}", ingredient);
+        }
         print!("TODO: Vérifier puis allez chercher les ingrédients de {:?}", titre_recette);
         Ok(true)
     }

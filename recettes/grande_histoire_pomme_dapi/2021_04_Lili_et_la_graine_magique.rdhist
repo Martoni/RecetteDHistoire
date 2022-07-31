@@ -8,7 +8,7 @@ codebarre: 3780237705950
 
 ingrédients:
     - media_type: son
-      nom: histoire_principale
+      nom: histoire principale
       format: Mp3
       source: Url
       url: https://audio.ausha.co/bllDMIzvMGL2.mp3
@@ -22,11 +22,11 @@ ingrédients:
 
 contenu:
     - media_type: titre
-      fichier_source: histoire_principale
+      fichier_source: histoire principale
       début: 0:57
       fin: 1:00
     - media_type: histoire
-      fichier_source: histoire_principale
+      fichier_source: histoire principale
       début: 1:00
       fin: ~
 ...

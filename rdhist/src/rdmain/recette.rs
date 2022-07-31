@@ -1,10 +1,13 @@
 extern crate serde;
 
+use std::fs;
 use std::error::Error;
 use serde::{Deserialize, Serialize};
 use serde_yaml::{self};
 
 use crate::rdmain::RDHIST_EXT;
+
+use crate::rdmain::ingredients::Ingredients;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum SourceTypes {
@@ -17,17 +20,6 @@ pub enum FormatTypes {
     Cdaudio,
     Mp3,
     Jpeg
-}
-
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct Ingredients {
-    pub media_type: String,
-    pub nom: String,
-    pub format: Option<FormatTypes>,
-    pub source: Option<SourceTypes>,
-    pub url: Option<String>,
-    pub md5sum: String,
-    pub dimensions: Option<String>
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
@@ -54,12 +46,22 @@ pub struct Recette {
     pub opérations: Option<Vec<Opération>>
 }
 
-
 impl Recette {
     pub fn new(filename: String) -> Result<Recette, Box<dyn Error>> {
         let rawcontent = std::fs::read_to_string(filename)?;
         let yrecette = serde_yaml::from_str(&rawcontent)?;
         Ok(yrecette)
+    }
+
+    pub fn create_cagette_dir(&self, dir_path: String) -> Result<String, Box<dyn Error>> {
+        let mut full_path:String = String::from("");
+        full_path.push_str(&dir_path);
+        full_path.push_str("/");
+        full_path.push_str(&self.date.replace("-","_"));
+        full_path.push_str("_");
+        full_path.push_str(&self.titre.replace(" ","_"));
+        fs::create_dir_all(&full_path)?; 
+        Ok(full_path)
     }
 }
 
