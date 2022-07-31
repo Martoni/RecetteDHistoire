@@ -75,8 +75,20 @@ impl RdMainConfig {
         Ok(recettelist)
     }
 
+    pub fn get_recette_by_title(&self, arg_titre: &String)
+                    -> Result<Recette, Box<dyn Error>> {
+        for rec in self.get_list_files_recettes()? {
+            if &rec.titre == arg_titre {
+                return Ok(rec);
+            }
+        }
+        Err(format!("La recette {:?} est introuvable", arg_titre).into())
+    }
+
     pub fn recolter_ingredients(&self, titre_recette: &String)
                     -> Result<bool, Box<dyn Error>> {
+        let rec = self.get_recette_by_title(titre_recette)?;
+        print!("Recette trouvé avec le code barre {:?}\n", rec.codebarre);
         print!("TODO: Vérifier puis allez chercher les ingrédients de {:?}", titre_recette);
         Ok(true)
     }
