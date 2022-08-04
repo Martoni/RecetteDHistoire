@@ -22,6 +22,16 @@ pub enum FormatTypes {
     Jpeg
 }
 
+impl FormatTypes {
+    pub fn extension(&self) -> String {
+        match self {
+            FormatTypes::Cdaudio => "au".to_string(),
+            FormatTypes::Mp3 => "mp3".to_string(),
+            FormatTypes::Jpeg => "jpg".to_string(),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Opération {
     pub media_type: String,

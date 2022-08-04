@@ -90,9 +90,10 @@ impl RdMainConfig {
                     -> Result<bool, Box<dyn Error>> {
         let rec = self.get_recette_by_title(titre_recette)?;
         let cagette_dir = rec.create_cagette_dir(format!("{}/{}", self.path, DATA_DIR_CAGETTES))?;
-        println!("Répertoire {:?} créé pour faire les courses", cagette_dir);
+        println!("Répertoire {:?} créé pour faire les courses", &cagette_dir);
         for ingredient in rec.ingrédients.iter() {
             println!("nom: {}", ingredient);
+            let fichier_ingredient = ingredient.recolter_dans(&cagette_dir);
         }
         print!("TODO: Vérifier puis allez chercher les ingrédients de {:?}", titre_recette);
         Ok(true)
