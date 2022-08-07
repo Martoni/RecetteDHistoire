@@ -1,0 +1,24 @@
+%YAML 1.2
+---
+titre: Tiens bon, petite panthèse !
+date: 2022-02-01
+collection: Mes premier j'aime lire
+numéro: 234
+codebarre: 3780291405957
+
+ingrédients:
+    - media_type: image
+      nom: couverture
+      url: https://i.hello-merlin.com/insecure/fill/180/0/ce/1/plain/https://static.bayard.io/presse/audio/MPRN0234/MPRN0234_Couv.png
+      dimension: 180x180
+      format: Webp
+      source: Url
+      md5sum: 8b2d423e9ba4363f9cd1b26e53dbea27
+    - media_type: son
+      nom: histoire_principale
+      format: Mp3 
+      source: Cdaudio
+
+recette:
+    - lecteur: raconteur v0.1
+      écran: dos 
