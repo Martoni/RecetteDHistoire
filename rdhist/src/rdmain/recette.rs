@@ -19,6 +19,7 @@ pub enum SourceTypes {
 pub enum FormatTypes {
     Cdaudio,
     Mp3,
+    Webp,
     Jpeg
 }
 
@@ -28,6 +29,7 @@ impl FormatTypes {
             FormatTypes::Cdaudio => "au".to_string(),
             FormatTypes::Mp3 => "mp3".to_string(),
             FormatTypes::Jpeg => "jpg".to_string(),
+            FormatTypes::Webp => "webp".to_string(),
         }
     }
 }
