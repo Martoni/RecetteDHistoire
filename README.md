@@ -24,7 +24,36 @@ Pour le moment deux boîtes à histoires sont visées par `RecetteDHistoire` :
 
 # Compilation et installation
 
-ÀFAIRE
+- Cloner le dépot :
+
+```
+$ git clone https://github.com/Martoni/RecetteDHistoire.git
+```
+
+- compiler les outils avec cargo:
+
+```
+$ cd RecetteDHistoire/rdhist
+$ cargo build
+```
+
+- Lancer le help du binaire principal :
+
+```
+$ ./target/debug/rdhist --help
+Recette d'Histoire 0.1
+Fabien Marteau <mail@fabienm.eu>
+Tous les ustensiles nécessaire pour cuisiner des histoires
+
+USAGE:
+    rdhist [OPTIONS]
+
+OPTIONS:
+    -h, --help                  Print help information
+    -l, --listerecettes         Liste les recettes disponibles
+    -r, --recolter <RECETTE>    Récolte les ingrédients de la recette donnée en argument
+    -V, --version               Print version information
+```
 
 # Outils
 
