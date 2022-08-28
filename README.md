@@ -55,9 +55,41 @@ OPTIONS:
     -V, --version               Print version information
 ```
 
+- Un répertoire dans le home `.local/share/rdhist/` contient toutes les recettes «officielles». Le plus simple est de créer ce répertoire et d'y faire un lien vers le répertoire recettes :
+
+```
+$ mkdir -p ~/.local/share/rdhist
+$ cd ~/.local/share/rdhist
+$ ln -s $RDHISTPRJ/recettes
+```
+
+- On peu ensuite lister les recettes disponibles:
+
+```
+$ ./target/debug/rdhist -l
+"Lili et la graine magique"
+"Un voyage extraordinaire"
+"Tiens bon, petite panthèse !"
+```
+
+- Puis récolter les ingrédients dans sa cagette :
+
+```
+$ ./target/debug/rdhist -r "Lili et la graine magique"
+```
+
+- Le indrédients sont téléchargés/extrait dans le répertoire `.local/share/rdhist/cagette`
+
+```
+$ ls ~/.local/share/rdhist/cagettes/
+2021_04_01_Lili_et_la_graine_magique
+$ ls ~/.local/share/rdhist/cagettes/2021_04_01_Lili_et_la_graine_magique/
+histoire_principale.mp3  illustration_podcast.jpg
+```
+
 # Outils
 
-En plus de l'exécutable principale, quelques utilitaires sont fournis avec le package.
+En plus de l'exécutable principal `rdhist`, quelques utilitaires sont fournis avec le package.
 
 ## convertrgb565
 
