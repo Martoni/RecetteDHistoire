@@ -1,5 +1,9 @@
 extern crate serde;
 
+/// Description du format de fichier pour les cahiers de recette
+/// Un fichier de recette porte l'extension `.rdhist` et est au
+/// format yaml
+
 use std::fs;
 use std::error::Error;
 use serde::{Deserialize, Serialize};
@@ -9,12 +13,14 @@ use crate::rdmain::RDHIST_EXT;
 
 use crate::rdmain::ingredients::Ingredients;
 
+/// Type de source à aller chercher
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum SourceTypes {
     Url,
     Cdaudio
 }
 
+/// Format de la source
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum FormatTypes {
     Cdaudio,
@@ -24,6 +30,7 @@ pub enum FormatTypes {
 }
 
 impl FormatTypes {
+    /// Donne l'extension du format de fichier
     pub fn extension(&self) -> String {
         match self {
             FormatTypes::Cdaudio => "au".to_string(),
@@ -72,7 +79,7 @@ impl Recette {
         full_path.push_str(&self.date.replace("-","_"));
         full_path.push_str("_");
         full_path.push_str(&self.titre.replace(" ","_"));
-        fs::create_dir_all(&full_path)?; 
+        fs::create_dir_all(&full_path)?;
         Ok(full_path)
     }
 }
