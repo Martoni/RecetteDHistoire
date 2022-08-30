@@ -6,7 +6,7 @@ télécharger dans les boîtes à histoires pour les enfants.
 Les sources, que l'on trouve dans le répertoire `recettes`, sont décrites dans
 un fichier de «recette» au format yaml.
 
-`RecetteDHistoire` va ensuite se charger de télécharger les média (s'ils se
+`RecetteDHistoire` va ensuite se charger de télécharger les médias (s'ils se
 trouvent sur le web, «ripper» le cd si c'est un livre avec CD audio) puis les
 formater pour les télécharger dans la boîte à histoire.
 
@@ -55,7 +55,9 @@ OPTIONS:
     -V, --version               Print version information
 ```
 
-- Un répertoire dans le home `.local/share/rdhist/` contient toutes les recettes «officielles». Le plus simple est de créer ce répertoire et d'y faire un lien vers le répertoire recettes :
+- Un répertoire dans le home `.local/share/rdhist/` contient toutes les
+  recettes «officielles». Le plus simple est de créer ce répertoire et d'y
+  faire un lien vers le répertoire recettes :
 
 ```
 $ mkdir -p ~/.local/share/rdhist
@@ -63,13 +65,13 @@ $ cd ~/.local/share/rdhist
 $ ln -s $RDHISTPRJ/recettes
 ```
 
-- On peu ensuite lister les recettes disponibles:
+- On peut ensuite lister les recettes disponibles:
 
 ```
 $ ./target/debug/rdhist -l
 "Lili et la graine magique"
 "Un voyage extraordinaire"
-"Tiens bon, petite panthèse !"
+"Tiens bon, petite panthère !"
 ```
 
 - Puis récolter les ingrédients dans sa cagette :
@@ -78,7 +80,7 @@ $ ./target/debug/rdhist -l
 $ ./target/debug/rdhist -r "Lili et la graine magique"
 ```
 
-- Le indrédients sont téléchargés/extrait dans le répertoire `.local/share/rdhist/cagette`
+- Le ingrédients sont téléchargés/extraits dans le répertoire `.local/share/rdhist/cagette`
 
 ```
 $ ls ~/.local/share/rdhist/cagettes/
@@ -89,7 +91,8 @@ histoire_principale.mp3  illustration_podcast.jpg
 
 # Outils
 
-En plus de l'exécutable principal `rdhist`, quelques utilitaires sont fournis avec le package.
+En plus de l'exécutable principal `rdhist`, quelques utilitaires sont fournis
+avec le package.
 
 ## convertrgb565
 

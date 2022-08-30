@@ -16,7 +16,8 @@ pub struct Ingredients {
     pub source: SourceTypes,
     pub url: Option<String>,
     pub md5sum: Option<String>,
-    pub dimensions: Option<String>
+    pub dimensions: Option<String>,
+    pub temps: Option<f32>
 }
 
 impl fmt::Display for Ingredients {

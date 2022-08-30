@@ -16,9 +16,10 @@ ingrédients:
       md5sum: 8b2d423e9ba4363f9cd1b26e53dbea27
     - media_type: son
       nom: histoire_principale
-      format: Mp3 
+      format: Mp3
       source: Cdaudio
+      temps: 639.16
 
 recette:
     - lecteur: raconteur v0.1
-      écran: dos 
+      écran: dos
