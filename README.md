@@ -24,6 +24,28 @@ Pour le moment deux boîtes à histoires sont visées par `RecetteDHistoire` :
 
 # Compilation et installation
 
+## Prérequis
+
+- libdiscid: Lire les tables des matières des CD de musique:
+
+```
+$ sudo apt install libdiscid-dev
+```
+
+- cdparanoia: Pour «ripper» les CD audio.
+
+```
+$ sudo apt install cdparanoia
+```
+
+- libclang:
+
+```
+$ sudo apt install libclang-dev
+```
+
+## Compilation
+
 - Cloner le dépot :
 
 ```

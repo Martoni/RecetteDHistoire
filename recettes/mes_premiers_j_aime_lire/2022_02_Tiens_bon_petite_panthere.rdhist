@@ -19,6 +19,7 @@ ingrédients:
       format: Mp3
       source: Cdaudio
       temps: 639.16
+      discid: 30027f05 5 150 2422 15072 29219 44022 641
 
 recette:
     - lecteur: raconteur v0.1
