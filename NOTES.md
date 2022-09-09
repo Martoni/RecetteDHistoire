@@ -10,7 +10,7 @@ $ cdparanoia -XB
 
 ## Identification d'un cd
 
-- Brute
+- Brute avec [cd-discid](https://github.com/taem/cd-discid)
 
 ```
 $ cd-discid

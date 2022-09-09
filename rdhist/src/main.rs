@@ -4,17 +4,11 @@ extern crate main_error;
 use clap::{Arg, App};
 use std::{str, process};
 use main_error::MainError;
-use rdhist::rdsound::cdaudio::get_discid;
 
 use rdhist::rdmain;
 
 fn main() -> Result<(), MainError> {
 
-
-    //XXX Stupid test
-    let ret = get_discid();
-    println!("{:?}", ret);
-    //XXX end of stupid test
 
     let mut app = App::new("Recette d'Histoire")
                     .version("0.1")

@@ -14,7 +14,7 @@ use recette::Recette;
 const DATA_DIR_PATH: &str = ".local/share/rdhist";
 const DATA_DIR_RECETTES: &str = "recettes";
 const DATA_DIR_CAGETTES: &str = "cagettes";
-const DATA_DIR_SORTIES: &str = "sorties";
+const _DATA_DIR_SORTIES: &str = "sorties";
 const RDHIST_EXT: &str = "rdhist";
 
 pub struct RdMainConfig {
@@ -93,7 +93,7 @@ impl RdMainConfig {
         println!("Répertoire {:?} créé pour faire les courses", &cagette_dir);
         for ingredient in rec.ingrédients.iter() {
             println!("nom: {}", ingredient);
-            let fichier_ingredient = ingredient.recolter_dans(&cagette_dir);
+            let _fichier_ingredient = ingredient.recolter_dans(&cagette_dir);
         }
         print!("TODO: Vérifier puis allez chercher les ingrédients de {:?}", titre_recette);
         Ok(true)

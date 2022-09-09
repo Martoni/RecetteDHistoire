@@ -48,7 +48,7 @@ impl Ingredients {
        }
     }
 
-    fn ripper_cd_dans(&self, dir_path: &String) -> Result<String, Box<dyn Error>> {
+    fn ripper_cd_dans(&self, _dir_path: &String) -> Result<String, Box<dyn Error>> {
         Err("TODO: ripper le CD audio".into())
     }
 
