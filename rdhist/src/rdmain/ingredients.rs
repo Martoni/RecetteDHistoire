@@ -2,6 +2,7 @@ extern crate serde;
 
 use std::error::Error;
 use std::fmt;
+use std::time::Duration;
 use std::process::Command;
 use std::path::Path;
 
@@ -19,6 +20,7 @@ pub struct Ingredients {
     pub dimensions: Option<String>,
     pub temps: Option<f32>,
     pub discid: Option<String>,
+    pub tracks: Option<Vec<f32>>,
 }
 
 impl fmt::Display for Ingredients {

@@ -8,6 +8,7 @@ use std::fs;
 pub mod recette;
 pub mod ingredients;
 pub mod rdhistcli;
+pub mod test_recette;
 
 use recette::Recette;
 
@@ -70,7 +71,7 @@ impl RdMainConfig {
                 let rfilepath = file.path().display().to_string();
                 if recette::recette_ext_check(&rfilepath) {
                     recettelist.push(Recette::new(rfilepath)?);
-                    }
+                }
             }
         }
         Ok(recettelist)

@@ -20,6 +20,12 @@ ingrédients:
       source: Cdaudio
       temps: 639.16
       discid: 30027f05 5 150 2422 15072 29219 44022 641
+      tracks:
+        - 30.22
+        - 168.5
+        - 188.47
+        - 197.28
+        - 54.19
 
 recette:
     - lecteur: raconteur v0.1
