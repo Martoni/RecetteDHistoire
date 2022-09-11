@@ -2,12 +2,12 @@ extern crate serde;
 
 use std::error::Error;
 use std::fmt;
-use std::time::Duration;
 use std::process::Command;
 use std::path::Path;
-
 use serde::{Deserialize, Serialize};
+
 use crate::rdmain::recette::{FormatTypes, SourceTypes};
+use crate::rdsound::cdaudio::*;
  
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Ingredients {
@@ -33,7 +33,6 @@ impl Ingredients {
 
     fn télécharger_dans(&self, dir_path: &String) -> Result<String, Box<dyn Error>> {
        if let Some(surl) = &self.url {
-           println!("debug downloading {:?} to {:?}", &surl, dir_path);
            let filepath = Path::new(&dir_path)
                .join(self.nom.to_owned() +
                "." +
@@ -50,8 +49,24 @@ impl Ingredients {
        }
     }
 
-    fn ripper_cd_dans(&self, _dir_path: &String) -> Result<String, Box<dyn Error>> {
-        Err("TODO: ripper le CD audio".into())
+    fn ripper_cd_dans(&self, _dir_path: &String)
+                    -> Result<String, Box<dyn Error>> {
+        /// On vérifie d'abord que le cd présent dans le lecteur est le bon
+        if self.discid == None {
+            return Err("La recette ne contient pas de signature de disque 'discid'".into());
+        }
+        let str_discid = self.discid.as_ref().unwrap();
+        let ingr_discid = DiscId::from_string(str_discid.to_string())?;
+        let drive_discid = DiscId::in_drive()?;
+        if ingr_discid != drive_discid {
+            let _ret = disc_eject().expect("Impossible d'éjecter le cd du lecteur");
+            return Err("Le cd dans le lecteur ne correspond pas à l'histoire".into());
+        }
+
+        /// On récupère la table des matières
+        let message = "TODO: ripper le CD audio";
+        println!("{}", message);
+        Err(message.into())
     }
 
     pub fn recolter_dans(&self, dir_path: &String) -> Result<String, Box<dyn Error>> {

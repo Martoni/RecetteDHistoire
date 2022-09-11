@@ -45,10 +45,9 @@ fn main() -> Result<(), MainError> {
     let recolterval = matches.value_of("recolter").unwrap_or("None").to_string();
     let cfg = cfg.set_recette_filename(recolterval);
 
-    if let Err(e) = rdmain::run(cfg) {
-        eprintln!("Erreur durant l'exécution du programme: {}", e);
-        process::exit(1);
+    // TODO: afficher les erreurs qui remontent
+    match rdmain::run(cfg) {
+        Ok(_cfg) => Ok(()),
+        Err(e) => Err(e)? 
     }
-
-    Ok(())
 }

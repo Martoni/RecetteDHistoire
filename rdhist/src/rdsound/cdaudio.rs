@@ -5,7 +5,7 @@ use std::process::Command;
 use std::time::Duration;
 use std::str;
 
-
+const CMD_EJECT: &str = "eject";
 const CMD_CDDISCID: &str = "cd-discid";
 const CMD_CDPARANOIA: &str = "cdparanoia";
 
@@ -18,6 +18,7 @@ pub fn get_discid() -> Result<String, Box<dyn Error>> {
     Ok(str::replace(str::from_utf8(&_cmdret.stdout)?,"\n",""))
 }
 
+/// Lit la table des matières du cd avec cdparanoia
 pub fn get_toc() -> Result<String, Box<dyn Error>> {
     let _cmdret = Command::new(CMD_CDPARANOIA)
                         .args(["-Q"])
@@ -29,6 +30,15 @@ pub fn get_toc() -> Result<String, Box<dyn Error>> {
     let sret = _cmdret.stderr;
 
     Ok(str::from_utf8(&sret)?.to_string())
+}
+
+/// Éject le disque présent
+pub fn disc_eject() -> Result<bool, Box<dyn Error>> {
+    let _cmdret = Command::new(CMD_EJECT)
+                           .output()
+                           .expect(&format!("Impossible d'éjecter le CD"));
+    let _ret = _cmdret.stdout;
+    Ok(true)
 }
 
 pub fn parse_duration(raw_duration: &str) -> Result<Duration, Box<dyn Error>> {
