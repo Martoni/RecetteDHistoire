@@ -2,7 +2,7 @@ extern crate clap;
 extern crate main_error;
 
 use clap::{Arg, App};
-use std::{str, process};
+use std::str;
 use main_error::MainError;
 
 use rdhist::rdmain;
@@ -45,9 +45,5 @@ fn main() -> Result<(), MainError> {
     let recolterval = matches.value_of("recolter").unwrap_or("None").to_string();
     let cfg = cfg.set_recette_filename(recolterval);
 
-    // TODO: afficher les erreurs qui remontent
-    match rdmain::run(cfg) {
-        Ok(_cfg) => Ok(()),
-        Err(e) => Err(e)? 
-    }
+    Ok(rdmain::run(cfg)?)
 }

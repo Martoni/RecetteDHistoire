@@ -94,25 +94,27 @@ impl RdMainConfig {
         println!("Répertoire créé pour faire les courses:\n{}\n", &cagette_dir);
         for ingredient in rec.ingrédients.iter() {
             println!("nom: {}", ingredient);
-            let _fichier_ingredient = ingredient.recolter_dans(&cagette_dir);
+            let _fichier_ingredient = ingredient.recolter_dans(&cagette_dir)?;
         }
         Ok(true)
     }
 }
 
-pub fn run(cfg: RdMainConfig) -> Result<RdMainConfig, Box<dyn Error>> {
+pub fn run(cfg: RdMainConfig) -> Result<(), Box<dyn Error>> {
     if cfg.cmdlist {
         let list_recettes = cfg.get_list_files_recettes()?;
         for recette in list_recettes {
             println!("{:?}", &recette.titre);
         }
-        Ok(cfg)
+        Ok(())
     } else if cfg.recette_filename != "None" {
-        let _ret = cfg.recolter_ingredients(&cfg.recette_filename)?;
-        Ok(cfg)
+        if let Err(e) = cfg.recolter_ingredients(&cfg.recette_filename) {
+          return Err(format!("Impossible de récolter les éléments : {}", e).into())
+        }
+        Ok(())
     } else {
         match cfg.rdhistcli() {
-            Ok(cfg) => {println!("Au revoir"); Ok(cfg)}
+            Ok(_) => {println!("Au revoir"); Ok(())}
             _ => Err(format!("Il y a eu un problème avec la ligne de commande").into())
         }
 

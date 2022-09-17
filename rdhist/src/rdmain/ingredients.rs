@@ -51,7 +51,7 @@ impl Ingredients {
 
     fn ripper_cd_dans(&self, _dir_path: &String)
                     -> Result<String, Box<dyn Error>> {
-        /// On vérifie d'abord que le cd présent dans le lecteur est le bon
+        // On vérifie d'abord que le cd présent dans le lecteur est le bon
         if self.discid == None {
             return Err("La recette ne contient pas de signature de disque 'discid'".into());
         }
@@ -63,7 +63,21 @@ impl Ingredients {
             return Err("Le cd dans le lecteur ne correspond pas à l'histoire".into());
         }
 
-        /// On récupère la table des matières
+        // On récupère la table des matières et on vérifie que c'est la même
+        // que dans la recette
+        let cdtoc = CdToc::in_drive()?;
+        if cdtoc.ntracks != ingr_discid.tracks_number()? {
+            return Err("Le cd n'a pas le même nombre de piste que la recette".into());
+        }
+        let ingr_tracks = self.tracks.as_ref().expect("Pas de tracks dans les ingrédients");
+        for n in 0..ingr_discid.tracks_number()? {
+            let n: usize = n as usize; //Les indices de slice doivent être des usize
+            if ingr_tracks[n] != cdtoc.tracks[n].as_secs_f32() {
+                return Err(format!("La piste {} du CD fait {:?} sec, \
+                                    alors qu'il est noté {:?} sec dans la recette.",
+                                    n, cdtoc.tracks[n], ingr_tracks[n]).into());
+            }
+        }
         let message = "TODO: ripper le CD audio";
         println!("{}", message);
         Err(message.into())
