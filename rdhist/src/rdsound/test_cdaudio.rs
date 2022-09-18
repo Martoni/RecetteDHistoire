@@ -97,3 +97,18 @@ mod test_table_of_content {
         assert!(true);
     }
 }
+
+#[cfg(test)]
+mod test_wav_conversion {
+    use crate::rdsound::cdaudio::*;
+    use super::*;
+
+    #[test]
+    fn test_wave2mp3(){
+        let ret = wav2mp3("/tmp/track01.cdda.wav".to_string(),
+                          "/tmp".to_string(),
+                          "track01.mp3".to_string())
+                          .expect("wave2mp3 error");
+        assert!(true);
+    }
+}

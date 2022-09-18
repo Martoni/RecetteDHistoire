@@ -8,6 +8,7 @@ use std::str;
 const CMD_EJECT: &str = "eject";
 const CMD_CDDISCID: &str = "cd-discid";
 const CMD_CDPARANOIA: &str = "cdparanoia";
+const CMD_FFMPEG: &str = "ffmpeg";
 
 /// Lit le numéro unique du CD se trouvant dans le lecteur
 pub fn get_discid() -> Result<String, Box<dyn Error>> {
@@ -65,9 +66,25 @@ pub fn parse_toc(ntrack: u8, raw_toc: &str) -> Result<Vec<Duration>, Box<dyn Err
     Ok(tracks)
 }
 
-///---------------------
-/// Table Of Content
-///---------------------
+///-----------------------
+/// Conversion wav -> mp3
+///-----------------------
+
+pub fn wav2mp3(input_file_path: String,
+            output_dir: String,
+            output_filename: String) -> Result<bool, Box<dyn Error>> {
+    let output_file_path = format!("{}/{}", output_dir, output_filename);
+    let _cmdret = Command::new(CMD_FFMPEG)
+        .args(["-i", &input_file_path])
+        .args(["-acodec", "mp3", &output_file_path])
+        .output()
+        .expect(&format!("Impossible de convertir {} en mp3", &input_file_path));
+    Ok(true)
+}
+
+///-------------------------------
+/// Table Of Content and cdrip
+///-------------------------------
 
 pub struct CdToc {
     pub ntracks: u8,
@@ -85,6 +102,28 @@ impl CdToc {
             ntracks: ntracks,
             tracks: parse_toc(ntracks, &raw_toc)?,
         })
+    }
+
+    pub fn rip2wave(&self, output_dir: String) -> Result<bool, Box<dyn Error>> {
+        let _ripcmd = Command::new(CMD_CDPARANOIA)
+                .current_dir(output_dir)
+                .arg("-w")
+                .arg("-B")
+                .output()
+                .expect("Impossible de ripper le CD avec cdparanoia");
+        Ok(true)
+    }
+
+    pub fn save2mp3(&self, wave_dir: String, output_dir: String)
+                -> Result<bool, Box<dyn Error>> {
+        for tracknum in 1..=self.ntracks {
+            let trackname = format!("track{:02}.cdda.wav", tracknum);
+            let inputpath = format!("{}/{}", &wave_dir, &trackname);
+            let outrack = format!("track{:02}.mp3", tracknum);
+            println!("Convert {}", &outrack);
+            let _ret = wav2mp3(inputpath, (&output_dir).into(), outrack)?;
+        }
+        Ok(true)
     }
 }
 

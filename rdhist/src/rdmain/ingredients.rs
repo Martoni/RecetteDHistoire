@@ -49,7 +49,7 @@ impl Ingredients {
        }
     }
 
-    fn ripper_cd_dans(&self, _dir_path: &String)
+    fn ripper_cd_dans(&self, dir_path: String)
                     -> Result<String, Box<dyn Error>> {
         // On vérifie d'abord que le cd présent dans le lecteur est le bon
         if self.discid == None {
@@ -78,15 +78,20 @@ impl Ingredients {
                                     n, cdtoc.tracks[n], ingr_tracks[n]).into());
             }
         }
-        let message = "TODO: ripper le CD audio";
-        println!("{}", message);
-        Err(message.into())
+
+        // on rippe le cd en wave dans le répertoire /tmp/
+        let _ripwave = cdtoc.rip2wave("/tmp".to_string())?;
+
+        // on converti les fichiers en mp3 dans la cagette
+        let _wav2mp3 = cdtoc.save2mp3("/tmp".to_string(), dir_path)?;
+
+        Ok("ok".into())
     }
 
     pub fn recolter_dans(&self, dir_path: &String) -> Result<String, Box<dyn Error>> {
         match self.source {
             SourceTypes::Url => {self.télécharger_dans(dir_path)}
-            SourceTypes::Cdaudio => {self.ripper_cd_dans(dir_path)}
+            SourceTypes::Cdaudio => {self.ripper_cd_dans(dir_path.to_string())}
         }
     }
 }
