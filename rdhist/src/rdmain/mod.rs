@@ -10,6 +10,7 @@ pub mod ingredients;
 pub mod rdhistcli;
 pub mod test_recette;
 
+use rdhistcli::RdhistCli;
 use recette::Recette;
 
 const DATA_DIR_PATH: &str = ".local/share/rdhist";
@@ -113,7 +114,9 @@ pub fn run(cfg: RdMainConfig) -> Result<(), Box<dyn Error>> {
         }
         Ok(())
     } else {
-        match cfg.rdhistcli() {
+        // lancement de la console
+        let rdc = RdhistCli::new()?;
+        match rdc.cli() {
             Ok(_) => {println!("Au revoir"); Ok(())}
             _ => Err(format!("Il y a eu un problème avec la ligne de commande").into())
         }
