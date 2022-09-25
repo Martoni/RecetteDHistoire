@@ -88,6 +88,15 @@ impl RdMainConfig {
         Err(format!("La recette {:?} est introuvable", arg_titre).into())
     }
 
+    pub fn afficher_recettes_disponibles(&self) -> Result<(), Box<dyn Error>> {
+        let list_recettes = self.get_list_files_recettes()?;
+        println!("Collection            Titre");
+        for recette in list_recettes {
+            println!("{} : {}", &recette.collection, &recette.titre);
+        }
+        Ok(())
+    }
+
     pub fn recolter_ingredients(&self, titre_recette: &String)
                     -> Result<bool, Box<dyn Error>> {
         let rec = self.get_recette_by_title(titre_recette)?;
@@ -103,10 +112,7 @@ impl RdMainConfig {
 
 pub fn run(cfg: RdMainConfig) -> Result<(), Box<dyn Error>> {
     if cfg.cmdlist {
-        let list_recettes = cfg.get_list_files_recettes()?;
-        for recette in list_recettes {
-            println!("{:?}", &recette.titre);
-        }
+        let _ = cfg.afficher_recettes_disponibles();
         Ok(())
     } else if cfg.recette_filename != "None" {
         if let Err(e) = cfg.recolter_ingredients(&cfg.recette_filename) {
@@ -115,7 +121,7 @@ pub fn run(cfg: RdMainConfig) -> Result<(), Box<dyn Error>> {
         Ok(())
     } else {
         // lancement de la console
-        let rdc = RdhistCli::new()?;
+        let rdc = RdhistCli::new(cfg)?;
         match rdc.cli() {
             Ok(_) => {println!("Au revoir"); Ok(())}
             _ => Err(format!("Il y a eu un problème avec la ligne de commande").into())

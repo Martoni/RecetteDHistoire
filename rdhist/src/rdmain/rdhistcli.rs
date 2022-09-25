@@ -1,6 +1,7 @@
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
 use crate::rdmain::Error;
+use crate::rdmain::RdMainConfig;
 
 const RDHISTORY_FILENAME: &str = "rdhistory.txt";
 const RDHISTPROMPT: &str = "rdhist> ";
@@ -8,14 +9,16 @@ const RDHISTPROMPT: &str = "rdhist> ";
 pub struct RdhistCli {
     pub history_filename: String,
     pub prompt: String,
+    pub maincfg: RdMainConfig,
 }
 
 impl RdhistCli {
 
-    pub fn new() -> Result<RdhistCli, Box<dyn Error>> {
+    pub fn new(cfg: RdMainConfig) -> Result<RdhistCli, Box<dyn Error>> {
         let rdhistcli = RdhistCli {
             history_filename: RDHISTORY_FILENAME.into(),
             prompt: RDHISTPROMPT.into(),
+            maincfg: cfg,
         };
         Ok(rdhistcli)
     }
@@ -35,7 +38,7 @@ impl RdhistCli {
                     if args.len() != 0 {
                         match args[0] {
                             "exit" => {break}
-//                            "list" => {list()}
+                            "list" => {let _ = &self.list();}
                             _ => {println!("args {:?}", args)}
                         }
                     }
@@ -56,5 +59,11 @@ impl RdhistCli {
         }
         rl.save_history(&self.history_filename).unwrap();
         Ok(self)
+    }
+
+    // commandes
+    fn list(&self) -> Result<(), Box<dyn Error>>{
+        let _ = self.maincfg.afficher_recettes_disponibles()?;
+        Ok(())
     }
 }
