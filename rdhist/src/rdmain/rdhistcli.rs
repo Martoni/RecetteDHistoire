@@ -38,23 +38,23 @@ impl RdhistCli {
                     if args.len() != 0 {
                         match args[0] {
                             "exit" => {break}
-                            "list" => {let _ = &self.list();}
+                            "list" => {let _ = &self.list()?;}
                             _ => {println!("args {:?}", args)}
                         }
                     }
                 },
-                Err(ReadlineError::Interrupted) => {
-                    println!("CTRL-C");
-                    break;
-                },
-                Err(ReadlineError::Eof) => {
-                    println!("CTRL-D");
-                    break
-                },
-                Err(err) => {
-                    println!("Error: {:?}", err);
-                    break
-                }
+                    Err(ReadlineError::Interrupted) => {
+                        println!("CTRL-C");
+                        break;
+                    },
+                    Err(ReadlineError::Eof) => {
+                        println!("CTRL-D");
+                        break
+                    },
+                    Err(err) => {
+                        println!("Error: {:?}", err);
+                        break
+                    }
             }
         }
         rl.save_history(&self.history_filename).unwrap();

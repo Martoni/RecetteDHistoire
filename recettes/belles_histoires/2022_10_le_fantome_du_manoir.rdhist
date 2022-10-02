@@ -1,0 +1,34 @@
+%YAML 1.2
+---
+titre: Le fantôme du manoir
+date: 2022-10-01
+collection: Les belles histoires
+numéro: 598
+codebarre: 3780115806502
+
+ingrédients:
+    - media_type: image
+      nom: couverture
+      url: https://www.belleshistoires.com/wp-content/uploads/sites/35/2022/09/BHI-couv-octobre-2022.jpg
+      dimension: 700x770
+      format: Jpeg
+      source: Url
+      md5sum: 6817b81f948c7991422af1659fbeff11
+    - media_type: son
+      nom: histoire_principale
+      format: Mp3
+      source: Cdaudio
+      temps: 461.34 
+      discid: 7a01cd0b 11 150 5768 8451 11949 14395 16973 20654 23114 25846 28378 32032 463
+      tracks:
+        - 74.68
+        - 35.58
+        - 46.48
+        - 32.46
+        - 34.28
+        - 49.06
+        - 32.60
+        - 36.32
+        - 33.57
+        - 48.54
+        - 36.27

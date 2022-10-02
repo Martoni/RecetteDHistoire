@@ -56,9 +56,8 @@ impl RdMainConfig {
 
     pub fn get_list_files_recettes(&self) -> Result<Vec<Recette>, Box<dyn Error>> {
         let mut recettelist: Vec<Recette> = vec![];
-        for file in fs::read_dir(format!("{}/{}",
-                                        &self.path,
-                                        DATA_DIR_RECETTES))? {
+        let recettes_dir = format!("{}/{}", &self.path, DATA_DIR_RECETTES);
+        for file in fs::read_dir(recettes_dir)? {
             let file = file?;
             let path = file.path();
             if path.is_dir() {
@@ -124,7 +123,7 @@ pub fn run(cfg: RdMainConfig) -> Result<(), Box<dyn Error>> {
         let rdc = RdhistCli::new(cfg)?;
         match rdc.cli() {
             Ok(_) => {println!("Au revoir"); Ok(())}
-            _ => Err(format!("Il y a eu un problème avec la ligne de commande").into())
+            Err(e) => Err(format!("Il y a eu un problème avec la ligne de commande : {}", e).into())
         }
 
     }

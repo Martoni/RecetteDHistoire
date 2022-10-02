@@ -11,7 +11,7 @@ ingrédients:
       nom: couverture
       url: https://i.hello-merlin.com/insecure/fill/180/0/ce/1/plain/https://static.bayard.io/presse/audio/MPRN0234/MPRN0234_Couv.png
       dimension: 180x180
-      format: Webp
+      format: Png 
       source: Url
       md5sum: 8b2d423e9ba4363f9cd1b26e53dbea27
     - media_type: son

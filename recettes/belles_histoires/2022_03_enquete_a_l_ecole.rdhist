@@ -1,0 +1,29 @@
+%YAML 1.2
+---
+titre: Enquête à l'école
+date: 2022-03-01
+collection: Les belles histoires
+numéro: 591
+
+ingrédients:
+    - media_type: image
+      nom: couverture
+      url: https://www.belleshistoires.com/wp-content/uploads/sites/35/2022/02/BHI-couv-volume.jpg 
+      dimension: 700x770
+      format: Jpeg
+      source: Url
+      md5sum: 652a935d15e1bc3b7fdb8c97379fc0fe
+    - media_type: son
+      nom: histoire_principale
+      format: Mp3
+      source: Cdaudio
+      temps: 12345.6
+      discid: 30027f05 5 150 2422 15072 29219 44022 641
+      tracks:
+        - 30.22
+        - 168.5
+        - 188.47
+        - 197.28
+        - 54.19
+
+# Attention, les données du cdaudio sont fausse
