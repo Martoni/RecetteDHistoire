@@ -9,19 +9,24 @@ pub mod recette;
 pub mod ingredients;
 pub mod rdhistcli;
 pub mod test_recette;
+pub mod rdhistcaprice;
+
+use crate::rdappareils;
 
 use rdhistcli::RdhistCli;
+use rdhistcaprice::RdhistCaprice;
 use recette::Recette;
 
 const DATA_DIR_PATH: &str = ".local/share/rdhist";
 const DATA_DIR_RECETTES: &str = "recettes";
 const DATA_DIR_CAGETTES: &str = "cagettes";
-const _DATA_DIR_SORTIES: &str = "sorties";
+const _DATA_DIR_SERVICES: &str = "services";
 const RDHIST_EXT: &str = "rdhist";
 
 pub struct RdMainConfig {
     pub path: String,
     pub cmdlist: bool,
+    pub caprice: bool,
     pub recette_filename: String
 }
 
@@ -33,6 +38,7 @@ impl RdMainConfig {
         let conf = RdMainConfig {
             path: home_dir + "/" + &DATA_DIR_PATH,
             cmdlist: false,
+            caprice: false,
             recette_filename: "None".to_string()
         };
 
@@ -43,6 +49,13 @@ impl RdMainConfig {
     pub fn set_cmdlist(self) -> Self {
         RdMainConfig {
             cmdlist: true,
+            ..self
+        }
+    }
+ 
+    pub fn set_caprice(self) -> Self {
+        RdMainConfig {
+            caprice: true,
             ..self
         }
     }
@@ -87,11 +100,22 @@ impl RdMainConfig {
         Err(format!("La recette {:?} est introuvable", arg_titre).into())
     }
 
-    pub fn afficher_recettes_disponibles(&self) -> Result<(), Box<dyn Error>> {
+    pub fn afficher_recettes_disponibles(&self) -> Result<String, Box<dyn Error>> {
         let list_recettes = self.get_list_files_recettes()?;
-        println!("Collection            Titre");
         for recette in list_recettes {
             println!("{} : {}", &recette.collection, &recette.titre);
+        }
+        let retstr = list_recettes.iter()
+                .map(|x| format!("{} : {}", &x.collection, &x.titre))
+                .collect::<Vec<&str>>()
+                .join("\n");
+        Ok(retstr.into())
+    }
+
+    pub fn list_appareils(&self) -> Result<(), Box<dyn Error>> {
+        let rd_apps = rdappareils::RdAppareils::new()?;
+        for appareil in rd_apps.listapp {
+            println!("{}", &appareil.nom());
         }
         Ok(())
     }
@@ -118,8 +142,17 @@ pub fn run(cfg: RdMainConfig) -> Result<(), Box<dyn Error>> {
           return Err(format!("Impossible de récolter les éléments : {}", e).into())
         }
         Ok(())
+    } else if cfg.caprice {
+        // lancement de la console «caprice»
+        let rdc = RdhistCaprice::new(cfg)?;
+        match rdc.cli() {
+            Ok(_) => {
+                println!("Salut, et pas de caprices!");
+                Ok(())}
+            Err(e) => Err(format!("On avait dit pas de caprices : {}", e).into())
+        }
     } else {
-        // lancement de la console
+        // lancement de la console «classique»
         let rdc = RdhistCli::new(cfg)?;
         match rdc.cli() {
             Ok(_) => {println!("Au revoir"); Ok(())}

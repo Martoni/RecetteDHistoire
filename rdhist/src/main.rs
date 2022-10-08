@@ -20,6 +20,12 @@ fn main() -> Result<(), MainError> {
                          .value_name("LISTERECETTES")
                          .help("Liste les recettes disponibles")
                          .takes_value(false))
+                    .arg(Arg::new("caprice")
+                        .short('c')
+                        .long("caprice")
+                        .value_name("CAPRICE")
+                        .help("Lancer la ligne de commande «caprice»")
+                        .takes_value(false))
                     .arg(Arg::new("recolter")
                         .short('r')
                         .long("recolter")
@@ -38,6 +44,8 @@ fn main() -> Result<(), MainError> {
 
     let cfg = if matches.is_present("listerecettes") {
         rdmain::RdMainConfig::new()?.set_cmdlist()
+    } else if matches.is_present("caprice") {
+        rdmain::RdMainConfig::new()?.set_caprice()
     } else {
         rdmain::RdMainConfig::new()?
     };

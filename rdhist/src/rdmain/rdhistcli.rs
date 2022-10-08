@@ -39,22 +39,23 @@ impl RdhistCli {
                         match args[0] {
                             "exit" => {break}
                             "list" => {let _ = &self.list()?;}
+                            "listapp" => {let _ = &self.list_appareils()?;}
                             _ => {println!("args {:?}", args)}
                         }
                     }
                 },
-                    Err(ReadlineError::Interrupted) => {
-                        println!("CTRL-C");
-                        break;
-                    },
-                    Err(ReadlineError::Eof) => {
-                        println!("CTRL-D");
-                        break
-                    },
-                    Err(err) => {
-                        println!("Error: {:?}", err);
-                        break
-                    }
+                Err(ReadlineError::Interrupted) => {
+                    println!("CTRL-C");
+                    break;
+                },
+                Err(ReadlineError::Eof) => {
+                    println!("CTRL-D");
+                    break
+                },
+                Err(err) => {
+                    println!("Error: {:?}", err);
+                    break
+                }
             }
         }
         rl.save_history(&self.history_filename).unwrap();
@@ -64,6 +65,11 @@ impl RdhistCli {
     // commandes
     fn list(&self) -> Result<(), Box<dyn Error>>{
         let _ = self.maincfg.afficher_recettes_disponibles()?;
+        Ok(())
+    }
+
+    fn list_appareils(&self) -> Result<(), Box<dyn Error>>{
+        let _ = self.maincfg.list_appareils()?;
         Ok(())
     }
 }
