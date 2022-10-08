@@ -20,6 +20,12 @@ fn main() -> Result<(), MainError> {
                          .value_name("LISTERECETTES")
                          .help("Liste les recettes disponibles")
                          .takes_value(false))
+                    .arg(Arg::new("listappareils")
+                        .short('a')
+                        .long("listappareils")
+                        .value_name("LISTAPPAREILS")
+                        .help("Liste des appareils disponibles")
+                        .takes_value(false))
                     .arg(Arg::new("caprice")
                         .short('c')
                         .long("caprice")
@@ -46,6 +52,8 @@ fn main() -> Result<(), MainError> {
         rdmain::RdMainConfig::new()?.set_cmdlist()
     } else if matches.is_present("caprice") {
         rdmain::RdMainConfig::new()?.set_caprice()
+    } else if matches.is_present("listappareils") {
+        rdmain::RdMainConfig::new()?.set_listappareils()
     } else {
         rdmain::RdMainConfig::new()?
     };

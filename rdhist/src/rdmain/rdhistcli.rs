@@ -64,12 +64,14 @@ impl RdhistCli {
 
     // commandes
     fn list(&self) -> Result<(), Box<dyn Error>>{
-        let _ = self.maincfg.afficher_recettes_disponibles()?;
+        let ret = self.maincfg.afficher_recettes_disponibles()?;
+        println!("{}", &ret);
         Ok(())
     }
 
     fn list_appareils(&self) -> Result<(), Box<dyn Error>>{
-        let _ = self.maincfg.list_appareils()?;
+        let ret = self.maincfg.list_appareils()?;
+        println!("{}", &ret);
         Ok(())
     }
 }

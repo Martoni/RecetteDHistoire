@@ -27,6 +27,7 @@ pub struct RdMainConfig {
     pub path: String,
     pub cmdlist: bool,
     pub caprice: bool,
+    pub listappareils: bool,
     pub recette_filename: String
 }
 
@@ -39,6 +40,7 @@ impl RdMainConfig {
             path: home_dir + "/" + &DATA_DIR_PATH,
             cmdlist: false,
             caprice: false,
+            listappareils: false,
             recette_filename: "None".to_string()
         };
 
@@ -46,19 +48,9 @@ impl RdMainConfig {
     }
 
     /* set list command to true */
-    pub fn set_cmdlist(self) -> Self {
-        RdMainConfig {
-            cmdlist: true,
-            ..self
-        }
-    }
- 
-    pub fn set_caprice(self) -> Self {
-        RdMainConfig {
-            caprice: true,
-            ..self
-        }
-    }
+    pub fn set_cmdlist(self) -> Self {RdMainConfig {cmdlist: true, ..self}}
+    pub fn set_caprice(self) -> Self {RdMainConfig {caprice: true, ..self}}
+    pub fn set_listappareils(self) -> Self {RdMainConfig {listappareils: true, ..self}}
 
     pub fn set_recette_filename(self, recette_filename: String) -> Self {
         RdMainConfig {
@@ -102,22 +94,20 @@ impl RdMainConfig {
 
     pub fn afficher_recettes_disponibles(&self) -> Result<String, Box<dyn Error>> {
         let list_recettes = self.get_list_files_recettes()?;
-        for recette in list_recettes {
-            println!("{} : {}", &recette.collection, &recette.titre);
-        }
         let retstr = list_recettes.iter()
-                .map(|x| format!("{} : {}", &x.collection, &x.titre))
-                .collect::<Vec<&str>>()
-                .join("\n");
+                .map(|x| {format!("{} : {}", &x.collection, &x.titre).to_string()})
+                .collect::<Vec<String>>()
+                .join("\r\n");
         Ok(retstr.into())
     }
 
-    pub fn list_appareils(&self) -> Result<(), Box<dyn Error>> {
+    pub fn list_appareils(&self) -> Result<String, Box<dyn Error>> {
         let rd_apps = rdappareils::RdAppareils::new()?;
-        for appareil in rd_apps.listapp {
-            println!("{}", &appareil.nom());
-        }
-        Ok(())
+        let retstr = rd_apps.listapp.iter()
+                            .map(|x| x.nom().to_string())
+                            .collect::<Vec<String>>()
+                            .join("\r\n");
+        Ok(retstr)
     }
 
     pub fn recolter_ingredients(&self, titre_recette: &String)
@@ -135,7 +125,12 @@ impl RdMainConfig {
 
 pub fn run(cfg: RdMainConfig) -> Result<(), Box<dyn Error>> {
     if cfg.cmdlist {
-        let _ = cfg.afficher_recettes_disponibles();
+        let ret = cfg.afficher_recettes_disponibles()?;
+        println!("{}", &ret);
+        Ok(())
+    } else if cfg.listappareils {
+        let ret = cfg.list_appareils()?;
+        println!("{}", &ret);
         Ok(())
     } else if cfg.recette_filename != "None" {
         if let Err(e) = cfg.recolter_ingredients(&cfg.recette_filename) {

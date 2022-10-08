@@ -2,8 +2,6 @@ use crate::rdmain::Error;
 use crate::rdmain::RdMainConfig;
 
 use caprice::{Caprice, CapriceCommand};
-use std::thread;
-use std::time::Duration;
 
 static PROMPT: &str = "rdhist :!";
 
@@ -53,8 +51,12 @@ impl RdhistCaprice {
                        break},
                   // else send back the token to be printed
                   CMD_LISTE_RECETTES => {
-                    
-                    tx.send(CapriceCommand::Println("pouet !".into())).unwrap();
+                    let ret = self.rdmaincfg.afficher_recettes_disponibles()?;
+                    tx.send(CapriceCommand::Println(ret.into())).unwrap();
+                  }
+                  CMD_LISTE_APPAREILS => {
+                    let ret = self.rdmaincfg.list_appareils()?;
+                    tx.send(CapriceCommand::Println(ret.into())).unwrap();
                   }
                   _ => {
                       let print_token = format!("Got {} from Caprice", token);
