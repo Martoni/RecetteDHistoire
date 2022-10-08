@@ -1,12 +1,11 @@
 use crate::rdmain::Error;
 use crate::rdmain::RdMainConfig;
+use crate::rdmain::{CMD_LISTE_APPAREILS,
+                    CMD_LISTE_RECETTES};
 
 use caprice::{Caprice, CapriceCommand};
 
 static PROMPT: &str = "rdhist :!";
-
-const CMD_LISTE_RECETTES: &str  = "liste_recettes";
-const CMD_LISTE_APPAREILS: &str = "liste_appareils";
 
 pub struct RdhistCaprice {
     pub rdmaincfg: RdMainConfig,
@@ -26,6 +25,8 @@ impl RdhistCaprice {
           .set_keywords(vec![  // set some tokens
               CMD_LISTE_APPAREILS.to_owned(),
               CMD_LISTE_RECETTES.to_owned(),
+              CMD_RECOLTER.to_owned(),
+              CMD_SERVIR.to_owned(),
               "exit".to_owned(), // an exit keyword
           ])
           .init(); // initialises the caprice terminal
@@ -57,6 +58,9 @@ impl RdhistCaprice {
                   CMD_LISTE_APPAREILS => {
                     let ret = self.rdmaincfg.list_appareils()?;
                     tx.send(CapriceCommand::Println(ret.into())).unwrap();
+                  }
+                  CMD_RECOLTER => {
+                    let ret = self.rdmaincfg
                   }
                   _ => {
                       let print_token = format!("Got {} from Caprice", token);

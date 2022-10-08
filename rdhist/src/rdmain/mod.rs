@@ -23,6 +23,12 @@ const DATA_DIR_CAGETTES: &str = "cagettes";
 const _DATA_DIR_SERVICES: &str = "services";
 const RDHIST_EXT: &str = "rdhist";
 
+/* commandes */
+pub const CMD_LISTE_RECETTES: &str  = "listrec";
+pub const CMD_LISTE_APPAREILS: &str = "listapp";
+pub const CMD_RECOLTER: &str = "recolter";
+pub const CMD_SERVIR: &str = "servir";
+
 pub struct RdMainConfig {
     pub path: String,
     pub cmdlist: bool,

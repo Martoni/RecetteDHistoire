@@ -2,6 +2,8 @@ use rustyline::error::ReadlineError;
 use rustyline::Editor;
 use crate::rdmain::Error;
 use crate::rdmain::RdMainConfig;
+use crate::rdmain::{CMD_LISTE_APPAREILS,
+                    CMD_LISTE_RECETTES};
 
 const RDHISTORY_FILENAME: &str = "rdhistory.txt";
 const RDHISTPROMPT: &str = "rdhist> ";
@@ -38,8 +40,8 @@ impl RdhistCli {
                     if args.len() != 0 {
                         match args[0] {
                             "exit" => {break}
-                            "list" => {let _ = &self.list()?;}
-                            "listapp" => {let _ = &self.list_appareils()?;}
+                            CMD_LISTE_RECETTES => {let _ = &self.list()?;}
+                            CMD_LISTE_APPAREILS => {let _ = &self.list_appareils()?;}
                             _ => {println!("args {:?}", args)}
                         }
                     }

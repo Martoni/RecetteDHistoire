@@ -58,7 +58,9 @@ fn main() -> Result<(), MainError> {
         rdmain::RdMainConfig::new()?
     };
 
-    let recolterval = matches.value_of("recolter").unwrap_or("None").to_string();
+    let recolterval = matches.value_of("recolter")
+                            .unwrap_or("None")
+                            .to_string();
     let cfg = cfg.set_recette_filename(recolterval);
 
     Ok(rdmain::run(cfg)?)
