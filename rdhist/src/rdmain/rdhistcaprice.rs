@@ -1,7 +1,9 @@
 use crate::rdmain::Error;
 use crate::rdmain::RdMainConfig;
 use crate::rdmain::{CMD_LISTE_APPAREILS,
-                    CMD_LISTE_RECETTES};
+                    CMD_LISTE_RECETTES,
+                    CMD_RECOLTER,
+                    CMD_SERVIR};
 
 use caprice::{Caprice, CapriceCommand};
 
@@ -58,9 +60,6 @@ impl RdhistCaprice {
                   CMD_LISTE_APPAREILS => {
                     let ret = self.rdmaincfg.list_appareils()?;
                     tx.send(CapriceCommand::Println(ret.into())).unwrap();
-                  }
-                  CMD_RECOLTER => {
-                    let ret = self.rdmaincfg
                   }
                   _ => {
                       let print_token = format!("Got {} from Caprice", token);

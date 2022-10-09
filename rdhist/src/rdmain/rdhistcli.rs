@@ -3,10 +3,18 @@ use rustyline::Editor;
 use crate::rdmain::Error;
 use crate::rdmain::RdMainConfig;
 use crate::rdmain::{CMD_LISTE_APPAREILS,
-                    CMD_LISTE_RECETTES};
+                    CMD_LISTE_RECETTES,
+                    CMD_RECOLTER};
 
 const RDHISTORY_FILENAME: &str = "rdhistory.txt";
 const RDHISTPROMPT: &str = "rdhist> ";
+
+const LIST_CMD: &'static [&'static str] = &[
+    "exit",
+    "help",
+    CMD_LISTE_APPAREILS,
+    CMD_LISTE_RECETTES,
+    CMD_RECOLTER];
 
 pub struct RdhistCli {
     pub history_filename: String,
@@ -36,12 +44,14 @@ impl RdhistCli {
             match readline {
                 Ok(line) => {
                     rl.add_history_entry(line.as_str());
-                    let args: Vec<&str> = line.split_whitespace().collect();
+                    let args: Vec<&str> = line.split_whitespace().collect(); //XXX: doit prendre en compte les quote "
                     if args.len() != 0 {
                         match args[0] {
                             "exit" => {break}
+                            "help" => {let _ = &self.help()?;}
                             CMD_LISTE_RECETTES => {let _ = &self.list()?;}
                             CMD_LISTE_APPAREILS => {let _ = &self.list_appareils()?;}
+                            CMD_RECOLTER => {let _ = &self.recolter(args)?;}
                             _ => {println!("args {:?}", args)}
                         }
                     }
@@ -71,8 +81,20 @@ impl RdhistCli {
         Ok(())
     }
 
+    fn help(&self) -> Result<(), Box<dyn Error>>{
+         println!("Liste des commandes disponibles:\r\n{}\r\n",
+                    LIST_CMD.join("\r\n"));
+        Ok(())
+    }
+
     fn list_appareils(&self) -> Result<(), Box<dyn Error>>{
         let ret = self.maincfg.list_appareils()?;
+        println!("{}", &ret);
+        Ok(())
+    }
+
+    fn recolter(&self, args: Vec<&str>) -> Result<(), Box<dyn Error>>{
+        let ret = self.maincfg.recolter_ingredients(&args[1].to_string())?;
         println!("{}", &ret);
         Ok(())
     }
