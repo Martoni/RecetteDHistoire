@@ -9,12 +9,10 @@ pub mod recette;
 pub mod ingredients;
 pub mod rdhistcli;
 pub mod test_recette;
-pub mod rdhistcaprice;
 
 use crate::rdappareils;
 
 use rdhistcli::RdhistCli;
-use rdhistcaprice::RdhistCaprice;
 use recette::Recette;
 
 const DATA_DIR_PATH: &str = ".local/share/rdhist";
@@ -32,7 +30,6 @@ pub const CMD_SERVIR: &str = "servir";
 pub struct RdMainConfig {
     pub path: String,
     pub cmdlist: bool,
-    pub caprice: bool,
     pub listappareils: bool,
     pub recette_filename: String
 }
@@ -45,7 +42,6 @@ impl RdMainConfig {
         let conf = RdMainConfig {
             path: home_dir + "/" + &DATA_DIR_PATH,
             cmdlist: false,
-            caprice: false,
             listappareils: false,
             recette_filename: "None".to_string()
         };
@@ -55,7 +51,6 @@ impl RdMainConfig {
 
     /* set list command to true */
     pub fn set_cmdlist(self) -> Self {RdMainConfig {cmdlist: true, ..self}}
-    pub fn set_caprice(self) -> Self {RdMainConfig {caprice: true, ..self}}
     pub fn set_listappareils(self) -> Self {RdMainConfig {listappareils: true, ..self}}
 
     pub fn set_recette_filename(self, recette_filename: String) -> Self {
@@ -143,15 +138,6 @@ pub fn run(cfg: RdMainConfig) -> Result<(), Box<dyn Error>> {
           return Err(format!("Impossible de récolter les éléments : {}", e).into())
         }
         Ok(())
-    } else if cfg.caprice {
-        // lancement de la console «caprice»
-        let rdc = RdhistCaprice::new(cfg)?;
-        match rdc.cli() {
-            Ok(_) => {
-                println!("Salut, et pas de caprices!");
-                Ok(())}
-            Err(e) => Err(format!("On avait dit pas de caprices : {}", e).into())
-        }
     } else {
         // lancement de la console «classique»
         let rdc = RdhistCli::new(cfg)?;
