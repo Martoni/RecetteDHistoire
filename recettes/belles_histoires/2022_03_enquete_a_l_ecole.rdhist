@@ -18,7 +18,7 @@ ingrédients:
       format: Mp3
       source: Cdaudio
       temps: 12345.6
-      discid: 30027f05 5 150 2422 15072 29219 44022 641
+      discid: ffffffff 5 150 2422 15072 29219 44022 641
       tracks:
         - 30.22
         - 168.5
