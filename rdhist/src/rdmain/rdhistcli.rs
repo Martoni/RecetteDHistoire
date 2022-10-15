@@ -1,10 +1,20 @@
+use std::borrow::Cow::{self, Borrowed, Owned};
+// example from https://github.com/kkawakam/rustyline/blob/master/examples/example.rs
+use rustyline::completion::FilenameCompleter;
 use rustyline::error::ReadlineError;
-use rustyline::Editor;
+use rustyline::highlight::{Highlighter, MatchingBracketHighlighter};
+use rustyline::hint::HistoryHinter;
+use rustyline::validate::MatchingBracketValidator;
+use rustyline::{Cmd, CompletionType, Config, EditMode, Editor, KeyEvent};
+use rustyline_derive::{Completer, Helper, Hinter, Validator};
+
 use crate::rdmain::Error;
 use crate::rdmain::RdMainConfig;
 use crate::rdmain::{CMD_LISTE_APPAREILS,
                     CMD_LISTE_RECETTES,
                     CMD_RECOLTER};
+
+extern crate shell_words;
 
 const RDHISTORY_FILENAME: &str = "rdhistory.txt";
 const RDHISTPROMPT: &str = "rdhist> ";
@@ -15,6 +25,45 @@ const LIST_CMD: &'static [&'static str] = &[
     CMD_LISTE_APPAREILS,
     CMD_LISTE_RECETTES,
     CMD_RECOLTER];
+
+
+#[derive(Helper, Completer, Hinter, Validator)]
+struct MyHelper {
+    #[rustyline(Completer)]
+    completer: FilenameCompleter,
+    highlighter: MatchingBracketHighlighter,
+    #[rustyline(Validator)]
+    validator: MatchingBracketValidator,
+    #[rustyline(Hinter)]
+    hinter: HistoryHinter,
+    colored_prompt: String,
+}
+
+impl Highlighter for MyHelper {
+    fn highlight_prompt<'b, 's: 'b, 'p: 'b>(
+        &'s self,
+        prompt: &'p str,
+        default: bool,
+    ) -> Cow<'b, str> {
+        if default {
+            Borrowed(&self.colored_prompt)
+        } else {
+            Borrowed(prompt)
+        }
+    }
+
+    fn highlight_hint<'h>(&self, hint: &'h str) -> Cow<'h, str> {
+        Owned("\x1b[1m".to_owned() + hint + "\x1b[m")
+    }
+
+    fn highlight<'l>(&self, line: &'l str, pos: usize) -> Cow<'l, str> {
+        self.highlighter.highlight(line, pos)
+    }
+
+    fn highlight_char(&self, line: &str, pos: usize) -> bool {
+        self.highlighter.highlight_char(line, pos)
+    }
+}
 
 pub struct RdhistCli {
     pub history_filename: String,
@@ -33,9 +82,23 @@ impl RdhistCli {
         Ok(rdhistcli)
     }
 
+
     pub fn cli(self) -> Result<RdhistCli, Box<dyn Error>> {
         // `()` can be used when no completer is required
-        let mut rl = Editor::<()>::new();
+        let config = Config::builder()
+            .history_ignore_space(true)
+            .completion_type(CompletionType::List)
+            .build();
+        let h = MyHelper {
+            completer: FilenameCompleter::new(),
+            highlighter: MatchingBracketHighlighter::new(),
+            hinter: HistoryHinter {},
+            colored_prompt: RDHISTPROMPT.to_owned(),
+            validator: MatchingBracketValidator::new(),
+        };
+        let mut rl = Editor::with_config(config);
+        //let mut rl = Editor::<()>::new();
+        rl.set_helper(Some(h));
         if rl.load_history(&self.history_filename).is_err() {
             println!("No previous history.");
         }
@@ -44,9 +107,9 @@ impl RdhistCli {
             match readline {
                 Ok(line) => {
                     rl.add_history_entry(line.as_str());
-                    let args: Vec<&str> = line.split_whitespace().collect(); //XXX: doit prendre en compte les quote "
+                    let args = shell_words::split(&line)?;
                     if args.len() != 0 {
-                        match args[0] {
+                        match args[0].as_str() {
                             "exit" => {break}
                             "help" => {let _ = &self.help()?;}
                             CMD_LISTE_RECETTES => {let _ = &self.list()?;}
@@ -93,7 +156,7 @@ impl RdhistCli {
         Ok(())
     }
 
-    fn recolter(&self, args: Vec<&str>) -> Result<(), Box<dyn Error>>{
+    fn recolter(&self, args: Vec<String>) -> Result<(), Box<dyn Error>>{
         let ret = self.maincfg.recolter_ingredients(&args[1].to_string())?;
         println!("{}", &ret);
         Ok(())
