@@ -5,9 +5,8 @@ use rustyline::error::ReadlineError;
 use rustyline::highlight::{Highlighter, MatchingBracketHighlighter};
 use rustyline::hint::HistoryHinter;
 use rustyline::validate::MatchingBracketValidator;
-use rustyline::{Cmd, CompletionType, Config, EditMode, Editor, KeyEvent};
+use rustyline::{CompletionType, Config, EditMode, Editor};
 use rustyline_derive::{Completer, Helper, Hinter, Validator};
-
 use crate::rdmain::Error;
 use crate::rdmain::RdMainConfig;
 use crate::rdmain::{CMD_LISTE_APPAREILS,
@@ -86,6 +85,7 @@ impl RdhistCli {
     pub fn cli(self) -> Result<RdhistCli, Box<dyn Error>> {
         // `()` can be used when no completer is required
         let config = Config::builder()
+            .edit_mode(EditMode::Vi)
             .history_ignore_space(true)
             .completion_type(CompletionType::List)
             .build();
@@ -97,7 +97,6 @@ impl RdhistCli {
             validator: MatchingBracketValidator::new(),
         };
         let mut rl = Editor::with_config(config);
-        //let mut rl = Editor::<()>::new();
         rl.set_helper(Some(h));
         if rl.load_history(&self.history_filename).is_err() {
             println!("No previous history.");
@@ -151,14 +150,20 @@ impl RdhistCli {
     }
 
     fn list_appareils(&self) -> Result<(), Box<dyn Error>>{
-        let ret = self.maincfg.list_appareils()?;
-        println!("{}", &ret);
+        let ret = self.maincfg.list_appareils();
+        match ret {
+            Ok(ret) => {println!("{}", &ret)},
+            Err(msg) =>{println!("Erreur: {}", &msg)},
+        }
         Ok(())
     }
 
     fn recolter(&self, args: Vec<String>) -> Result<(), Box<dyn Error>>{
-        let ret = self.maincfg.recolter_ingredients(&args[1].to_string())?;
-        println!("{}", &ret);
+        let ret = self.maincfg.recolter_ingredients(&args[1].to_string());
+        match ret {
+            Ok(msg) => {println!("{}", &msg)},
+            Err(msg) => {println!("Erreur: {}", &msg)},
+        }
         Ok(())
     }
 }
