@@ -1,19 +1,15 @@
-use std::borrow::Cow::{self, Borrowed, Owned};
+extern crate shell_words;
+
 // example from https://github.com/kkawakam/rustyline/blob/master/examples/example.rs
-use rustyline::completion::FilenameCompleter;
 use rustyline::error::ReadlineError;
-use rustyline::highlight::{Highlighter, MatchingBracketHighlighter};
-use rustyline::hint::HistoryHinter;
-use rustyline::validate::MatchingBracketValidator;
 use rustyline::{CompletionType, Config, EditMode, Editor};
-use rustyline_derive::{Completer, Helper, Hinter, Validator};
+
+use crate::rdmain::rdhisthint::{RdHistHinter, rdhist_hints};
 use crate::rdmain::Error;
 use crate::rdmain::RdMainConfig;
 use crate::rdmain::{CMD_LISTE_APPAREILS,
                     CMD_LISTE_RECETTES,
                     CMD_RECOLTER};
-
-extern crate shell_words;
 
 const RDHISTORY_FILENAME: &str = "rdhistory.txt";
 const RDHISTPROMPT: &str = "rdhist> ";
@@ -25,50 +21,12 @@ const LIST_CMD: &'static [&'static str] = &[
     CMD_LISTE_RECETTES,
     CMD_RECOLTER];
 
-
-#[derive(Helper, Completer, Hinter, Validator)]
-struct MyHelper {
-    #[rustyline(Completer)]
-    completer: FilenameCompleter,
-    highlighter: MatchingBracketHighlighter,
-    #[rustyline(Validator)]
-    validator: MatchingBracketValidator,
-    #[rustyline(Hinter)]
-    hinter: HistoryHinter,
-    colored_prompt: String,
-}
-
-impl Highlighter for MyHelper {
-    fn highlight_prompt<'b, 's: 'b, 'p: 'b>(
-        &'s self,
-        prompt: &'p str,
-        default: bool,
-    ) -> Cow<'b, str> {
-        if default {
-            Borrowed(&self.colored_prompt)
-        } else {
-            Borrowed(prompt)
-        }
-    }
-
-    fn highlight_hint<'h>(&self, hint: &'h str) -> Cow<'h, str> {
-        Owned("\x1b[1m".to_owned() + hint + "\x1b[m")
-    }
-
-    fn highlight<'l>(&self, line: &'l str, pos: usize) -> Cow<'l, str> {
-        self.highlighter.highlight(line, pos)
-    }
-
-    fn highlight_char(&self, line: &str, pos: usize) -> bool {
-        self.highlighter.highlight_char(line, pos)
-    }
-}
-
 pub struct RdhistCli {
     pub history_filename: String,
     pub prompt: String,
     pub maincfg: RdMainConfig,
 }
+
 
 impl RdhistCli {
 
@@ -81,7 +39,6 @@ impl RdhistCli {
         Ok(rdhistcli)
     }
 
-
     pub fn cli(self) -> Result<RdhistCli, Box<dyn Error>> {
         // `()` can be used when no completer is required
         let config = Config::builder()
@@ -89,13 +46,11 @@ impl RdhistCli {
             .history_ignore_space(true)
             .completion_type(CompletionType::List)
             .build();
-        let h = MyHelper {
-            completer: FilenameCompleter::new(),
-            highlighter: MatchingBracketHighlighter::new(),
-            hinter: HistoryHinter {},
-            colored_prompt: RDHISTPROMPT.to_owned(),
-            validator: MatchingBracketValidator::new(),
+
+        let h = RdHistHinter {
+            hints: rdhist_hints(),
         };
+
         let mut rl = Editor::with_config(config);
         rl.set_helper(Some(h));
         if rl.load_history(&self.history_filename).is_err() {

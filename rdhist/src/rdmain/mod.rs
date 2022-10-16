@@ -8,6 +8,7 @@ use std::fs;
 pub mod recette;
 pub mod ingredients;
 pub mod rdhistcli;
+pub mod rdhisthint;
 pub mod test_recette;
 
 use crate::rdappareils;
