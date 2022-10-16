@@ -129,6 +129,17 @@ impl RdMainConfig {
                     -> Result<bool, Box<dyn Error>> {
         let rec = self.get_recette_by_title(titre_recette)?;
         println!("Titre: {}", rec.titre);
+        println!("Collection: {}", rec.collection);
+        println!("Numéro: {}", rec.numéro);
+        if let Some(codebarre) = rec.codebarre {
+            println!("codebarre: {}", codebarre);
+        }
+        println!("Date de parution: {}", rec.date);
+        println!("");
+        println!("{} Ingrédients :", rec.ingrédients.len());
+        for ingrédient in rec.ingrédients {
+            println!("{}", ingrédient); // À faire : indiquer si l'ingrédient est téléchargé et valide
+        }
         Ok(true)
     }
 }

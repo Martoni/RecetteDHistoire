@@ -78,7 +78,7 @@ impl RdhistCli {
                             "help" => {
                                 let _ = &self.help()?;}
                             CMD_INFORECETTE => {
-                                let _ = &self.inforecette()?;}
+                                let _ = &self.inforecette(args)?;}
                             CMD_LISTE_RECETTES => {
                                 let _ = &self.list()?;}
                             CMD_LISTE_APPAREILS => {
@@ -111,8 +111,12 @@ impl RdhistCli {
 
     // commandes
 
-    fn inforecette(&self) -> Result<(), Box<dyn Error>>{
-        println!("ÀFAIRE: Info recette");
+    fn inforecette(&self, args: Vec<String>) -> Result<(), Box<dyn Error>>{
+        let ret = self.maincfg.info_recette(&args[1].to_string());
+        match ret {
+            Ok(_)  => {},
+            Err(msg) => {println!("Erreur: {}", &msg)},
+        }
         Ok(())
     }
 
@@ -140,7 +144,7 @@ impl RdhistCli {
     fn recolter(&self, args: Vec<String>) -> Result<(), Box<dyn Error>>{
         let ret = self.maincfg.recolter_ingredients(&args[1].to_string());
         match ret {
-            Ok(msg) => {println!("{}", &msg)},
+            Ok(_) => {},
             Err(msg) => {println!("Erreur: {}", &msg)},
         }
         Ok(())
