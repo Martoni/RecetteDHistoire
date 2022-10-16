@@ -8,7 +8,7 @@ use std::fs;
 pub mod recette;
 pub mod ingredients;
 pub mod rdhistcli;
-pub mod rdhisthint;
+pub mod rdhisthelper;
 pub mod test_recette;
 
 use crate::rdappareils;
@@ -26,6 +26,7 @@ const RDHIST_EXT: &str = "rdhist";
 pub const CMD_LISTE_RECETTES: &str  = "listrec";
 pub const CMD_LISTE_APPAREILS: &str = "listapp";
 pub const CMD_RECOLTER: &str = "recolter";
+pub const CMD_INFORECETTE: &str = "inforec";
 pub const CMD_SERVIR: &str = "servir";
 
 pub struct RdMainConfig {
@@ -121,6 +122,13 @@ impl RdMainConfig {
             println!("nom: {}", ingredient);
             let _fichier_ingredient = ingredient.recolter_dans(&cagette_dir)?;
         }
+        Ok(true)
+    }
+
+    pub fn info_recette(&self, titre_recette: &String)
+                    -> Result<bool, Box<dyn Error>> {
+        let rec = self.get_recette_by_title(titre_recette)?;
+        println!("Titre: {}", rec.titre);
         Ok(true)
     }
 }

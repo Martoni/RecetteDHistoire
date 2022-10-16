@@ -3,13 +3,20 @@ use std::collections::HashSet;
 use rustyline::hint::{Hint, Hinter};
 use rustyline::Context;
 use rustyline_derive::{Completer, Helper, Highlighter, Validator};
+use rustyline::highlight::MatchingBracketHighlighter;
+use rustyline::completion::FilenameCompleter;
 
 use crate::rdmain::rdhistcli::LIST_CMD;
 
 #[derive(Completer, Helper, Validator, Highlighter)]
-pub struct RdHistHinter {
+pub struct RdHistHelper {
     // It's simple example of rustyline, for more efficient, please use ** radix trie **
     pub hints: HashSet<CommandHint>,
+    pub highlighter: MatchingBracketHighlighter,
+//    pub completer: FilenameCompleter,
+    #[rustyline(Completer)]
+    pub completer: FilenameCompleter,
+    pub colored_prompt: String,
 }
 
 #[derive(Hash, Debug, PartialEq, Eq)]
@@ -49,7 +56,7 @@ impl CommandHint {
     }
 }
 
-impl Hinter for RdHistHinter {
+impl Hinter for RdHistHelper {
     type Hint = CommandHint;
 
     fn hint(&self, line: &str, pos: usize, _ctx: &Context<'_>) -> Option<CommandHint> {

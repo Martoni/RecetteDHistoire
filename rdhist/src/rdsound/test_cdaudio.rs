@@ -26,7 +26,7 @@ TOTAL   47941 [10:39.16]    (audio only)
 #[cfg(test)]
 mod test_disc_id {
     use crate::rdsound::cdaudio::*;
-    use super::*;
+    use super::{DISCID_SAMPLE};
 
     /// les tests suivant fonctionne avec le cd
     /// de mes premiers j'aime lire titré
@@ -76,7 +76,7 @@ mod test_disc_id {
 #[cfg(test)]
 mod test_table_of_content {
     use crate::rdsound::cdaudio::*;
-    use super::*;
+    use super::{TOC_PANTHÈRE};
 
     #[test]
     fn test_get_toc() {
@@ -101,11 +101,10 @@ mod test_table_of_content {
 #[cfg(test)]
 mod test_wav_conversion {
     use crate::rdsound::cdaudio::*;
-    use super::*;
 
     #[test]
     fn test_wave2mp3(){
-        let ret = wav2mp3("/tmp/track01.cdda.wav".to_string(),
+        let _ret = wav2mp3("/tmp/track01.cdda.wav".to_string(),
                           "/tmp".to_string(),
                           "track01.mp3".to_string())
                           .expect("wave2mp3 error");

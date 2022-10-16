@@ -3,23 +3,30 @@ extern crate shell_words;
 // example from https://github.com/kkawakam/rustyline/blob/master/examples/example.rs
 use rustyline::error::ReadlineError;
 use rustyline::{CompletionType, Config, EditMode, Editor};
+use rustyline::highlight::MatchingBracketHighlighter;
+use rustyline::completion::FilenameCompleter;
 
-use crate::rdmain::rdhisthint::{RdHistHinter, rdhist_hints};
+use crate::rdmain::rdhisthelper::{RdHistHelper, rdhist_hints};
 use crate::rdmain::Error;
 use crate::rdmain::RdMainConfig;
 use crate::rdmain::{CMD_LISTE_APPAREILS,
                     CMD_LISTE_RECETTES,
+                    CMD_SERVIR,
+                    CMD_INFORECETTE,
                     CMD_RECOLTER};
 
-const RDHISTORY_FILENAME: &str = "rdhistory.txt";
-const RDHISTPROMPT: &str = "rdhist> ";
+const RDHISTORY_FILENAME: &'static str = "rdhistory.txt";
+const RDHISTPROMPT: &'static str = "rdhist> ";
+const RDHISTPROMPT_COLOR: &'static str = "\x1b[1;32mrdhist> \x1b[0m";
 
 pub const LIST_CMD: &'static [&'static str] = &[
     "exit",
     "help",
+    CMD_INFORECETTE,
     CMD_LISTE_APPAREILS,
     CMD_LISTE_RECETTES,
-    CMD_RECOLTER];
+    CMD_RECOLTER,
+    CMD_SERVIR];
 
 pub struct RdhistCli {
     pub history_filename: String,
@@ -27,13 +34,12 @@ pub struct RdhistCli {
     pub maincfg: RdMainConfig,
 }
 
-
 impl RdhistCli {
 
     pub fn new(cfg: RdMainConfig) -> Result<RdhistCli, Box<dyn Error>> {
         let rdhistcli = RdhistCli {
             history_filename: RDHISTORY_FILENAME.into(),
-            prompt: RDHISTPROMPT.into(),
+            prompt: RDHISTPROMPT_COLOR.into(),
             maincfg: cfg,
         };
         Ok(rdhistcli)
@@ -47,8 +53,11 @@ impl RdhistCli {
             .completion_type(CompletionType::List)
             .build();
 
-        let h = RdHistHinter {
+        let h = RdHistHelper {
             hints: rdhist_hints(),
+            highlighter: MatchingBracketHighlighter::new(),
+            completer: FilenameCompleter::new(),
+            colored_prompt: RDHISTPROMPT.to_owned(),
         };
 
         let mut rl = Editor::with_config(config);
@@ -64,12 +73,21 @@ impl RdhistCli {
                     let args = shell_words::split(&line)?;
                     if args.len() != 0 {
                         match args[0].as_str() {
-                            "exit" => {break}
-                            "help" => {let _ = &self.help()?;}
-                            CMD_LISTE_RECETTES => {let _ = &self.list()?;}
-                            CMD_LISTE_APPAREILS => {let _ = &self.list_appareils()?;}
-                            CMD_RECOLTER => {let _ = &self.recolter(args)?;}
-                            _ => {println!("args {:?}", args)}
+                            "exit" => {
+                                break}
+                            "help" => {
+                                let _ = &self.help()?;}
+                            CMD_INFORECETTE => {
+                                let _ = &self.inforecette()?;}
+                            CMD_LISTE_RECETTES => {
+                                let _ = &self.list()?;}
+                            CMD_LISTE_APPAREILS => {
+                                let _ = &self.list_appareils()?;}
+                            CMD_RECOLTER => {
+                                let _ = &self.recolter(args)?;}
+                            CMD_SERVIR => {
+                                let _ = &self.servir()?;}
+                            _ => {println!("Erreur: commande inconnue {:?}", args)}
                         }
                     }
                 },
@@ -92,6 +110,12 @@ impl RdhistCli {
     }
 
     // commandes
+
+    fn inforecette(&self) -> Result<(), Box<dyn Error>>{
+        println!("ÀFAIRE: Info recette");
+        Ok(())
+    }
+
     fn list(&self) -> Result<(), Box<dyn Error>>{
         let ret = self.maincfg.afficher_recettes_disponibles()?;
         println!("{}", &ret);
@@ -119,6 +143,11 @@ impl RdhistCli {
             Ok(msg) => {println!("{}", &msg)},
             Err(msg) => {println!("Erreur: {}", &msg)},
         }
+        Ok(())
+    }
+
+    fn servir(&self) -> Result<(), Box<dyn Error>>{
+        println!("ÀFAIRE: servir");
         Ok(())
     }
 }

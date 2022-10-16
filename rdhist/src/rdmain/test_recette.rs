@@ -6,14 +6,15 @@ const RECETTE_FILENAME: &str = "recettes/mes_premiers_j_aime_lire/2022_02_Tiens_
 #[cfg(test)]
 mod test_recette {
     use crate::rdmain::*;
-    use super::*;
+    use super::RECETTE_FILENAME;
 
     #[test]
     fn test_parse_recette() {
         let rdmain = RdMainConfig::new()
             .expect("Impossible de récupérer la configuration");
-        let recette = Recette::new(format!("{}/{}", &rdmain.path, RECETTE_FILENAME))
+        let _recette = Recette::new(format!("{}/{}", &rdmain.path, RECETTE_FILENAME))
             .expect("Impossible de créer la recette");
         assert!(true);
     }
+
 }

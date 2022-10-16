@@ -84,6 +84,8 @@ impl Recette {
         fs::create_dir_all(&full_path)?;
         Ok(full_path)
     }
+
+
 }
 
 pub fn print_type_of<T>(_: &T) {
