@@ -4,6 +4,8 @@ use rustyline::hint::{Hint, Hinter};
 use rustyline::Context;
 use rustyline_derive::{Completer, Helper, Highlighter, Validator};
 
+use crate::rdmain::rdhistcli::LIST_CMD;
+
 #[derive(Completer, Helper, Validator, Highlighter)]
 pub struct RdHistHinter {
     // It's simple example of rustyline, for more efficient, please use ** radix trie **
@@ -72,11 +74,9 @@ impl Hinter for RdHistHinter {
 
 pub fn rdhist_hints() -> HashSet<CommandHint> {
     let mut set = HashSet::new();
-    set.insert(CommandHint::new("help", "help"));
-    set.insert(CommandHint::new("get key", "get "));
-    set.insert(CommandHint::new("set key value", "set "));
-    set.insert(CommandHint::new("hget key field", "hget "));
-    set.insert(CommandHint::new("hset key field value", "hset "));
+    for cmd in LIST_CMD {
+        set.insert(CommandHint::new(cmd, cmd));
+    }
     set
 }
 

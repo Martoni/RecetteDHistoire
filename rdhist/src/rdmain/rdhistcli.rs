@@ -14,7 +14,7 @@ use crate::rdmain::{CMD_LISTE_APPAREILS,
 const RDHISTORY_FILENAME: &str = "rdhistory.txt";
 const RDHISTPROMPT: &str = "rdhist> ";
 
-const LIST_CMD: &'static [&'static str] = &[
+pub const LIST_CMD: &'static [&'static str] = &[
     "exit",
     "help",
     CMD_LISTE_APPAREILS,
