@@ -53,7 +53,7 @@ fn main() -> Result<(), MainError> {
     let recolterval = matches.value_of("recolter")
                             .unwrap_or("None")
                             .to_string();
-    let cfg = cfg.set_recette_filename(recolterval);
+    let cfg = cfg.set_titre_recette(recolterval);
 
     Ok(rdmain::run(cfg)?)
 }

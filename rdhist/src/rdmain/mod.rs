@@ -33,7 +33,7 @@ pub struct RdMainConfig {
     pub path: String,
     pub cmdlist: bool,
     pub listappareils: bool,
-    pub recette_filename: String
+    pub recette_titre: String
 }
 
 impl RdMainConfig {
@@ -45,7 +45,7 @@ impl RdMainConfig {
             path: home_dir + "/" + &DATA_DIR_PATH,
             cmdlist: false,
             listappareils: false,
-            recette_filename: "None".to_string()
+            recette_titre: "None".to_string()
         };
 
         Ok(conf)
@@ -55,9 +55,9 @@ impl RdMainConfig {
     pub fn set_cmdlist(self) -> Self {RdMainConfig {cmdlist: true, ..self}}
     pub fn set_listappareils(self) -> Self {RdMainConfig {listappareils: true, ..self}}
 
-    pub fn set_recette_filename(self, recette_filename: String) -> Self {
+    pub fn set_titre_recette(self, recette_titre: String) -> Self {
         RdMainConfig {
-            recette_filename,
+            recette_titre,
             ..self
         }
     }
@@ -153,8 +153,8 @@ pub fn run(cfg: RdMainConfig) -> Result<(), Box<dyn Error>> {
         let ret = cfg.list_appareils()?;
         println!("{}", &ret);
         Ok(())
-    } else if cfg.recette_filename != "None" {
-        if let Err(e) = cfg.recolter_ingredients(&cfg.recette_filename) {
+    } else if cfg.recette_titre != "None" {
+        if let Err(e) = cfg.recolter_ingredients(&cfg.recette_titre) {
           return Err(format!("Impossible de récolter les éléments : {}", e).into())
         }
         Ok(())
