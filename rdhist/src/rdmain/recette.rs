@@ -40,17 +40,35 @@ impl Recette {
         Ok(yrecette)
     }
 
-    pub fn create_cagette_dir(&self, dir_path: String) -> Result<String, Box<dyn Error>> {
+    
+    pub fn get_collection_dir(&self, dir_path: String) -> Result<String, Box<dyn Error>> {
+        let mut collection_dir: String = String::from(&dir_path);
+        collection_dir.push_str("/");
+        collection_dir.push_str(&aplatir_chaine(&self.collection));
+        Ok(collection_dir)
+    }
+
+    pub fn create_collection_dir(&self, dir_path: String) -> Result<String, Box<dyn Error>> {
+        let collection_dir = self.get_collection_dir(dir_path)?;
+        fs::create_dir_all(&collection_dir)?;
+        Ok(collection_dir)
+    }
+
+    pub fn get_cagette_dir(&self, collection_path: String) -> Result<String, Box<dyn Error>> {
         let mut full_path:String = String::from("");
-        full_path.push_str(&dir_path);
+        full_path.push_str(&collection_path);
         full_path.push_str("/");
-        full_path.push_str(&self.date.replace("-","_"));
+        full_path.push_str(&aplatir_chaine(&self.date));
         full_path.push_str("_");
-        full_path.push_str(&self.titre.replace(" ","_"));
-        fs::create_dir_all(&full_path)?;
+        full_path.push_str(&aplatir_chaine(&self.titre));
         Ok(full_path)
     }
 
+    pub fn create_cagette_dir(&self, collection_path: String) -> Result<String, Box<dyn Error>> {
+        let full_path = self.get_cagette_dir(collection_path)?;
+        fs::create_dir_all(&full_path)?;
+        Ok(full_path)
+    }
 
 }
 
