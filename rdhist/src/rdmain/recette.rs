@@ -10,38 +10,9 @@ use serde::{Deserialize, Serialize};
 use serde_yaml::{self};
 
 use crate::rdmain::RDHIST_EXT;
+use crate::rdmain::outils::aplatir_chaine;
 
 use crate::rdmain::ingredients::Ingredients;
-
-/// Type de source à aller chercher
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub enum SourceTypes {
-    Url,
-    Cdaudio
-}
-
-/// Format de la source
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub enum FormatTypes {
-    Cdaudio,
-    Mp3,
-    Webp,
-    Jpeg,
-    Png,
-}
-
-impl FormatTypes {
-    /// Donne l'extension du format de fichier
-    pub fn extension(&self) -> String {
-        match self {
-            FormatTypes::Cdaudio => "au".to_string(),
-            FormatTypes::Mp3 => "mp3".to_string(),
-            FormatTypes::Jpeg => "jpg".to_string(),
-            FormatTypes::Webp => "webp".to_string(),
-            FormatTypes::Png => "png".to_string(),
-        }
-    }
-}
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Opération {
@@ -50,11 +21,6 @@ pub struct Opération {
     pub début: String,
     pub fin: String,
 }
-
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct Contenus {
-    pub media_type: Vec<Opération>
-    }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Recette {
