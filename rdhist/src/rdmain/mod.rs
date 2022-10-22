@@ -113,15 +113,21 @@ impl RdMainConfig {
         Ok(retstr)
     }
 
+    fn get_data_dir_cagettes(&self) -> String {
+        format!("{}/{}", self.path, DATA_DIR_CAGETTES)
+    }
+
     pub fn recolter_ingredients(&self, titre_recette: &String)
                     -> Result<bool, Box<dyn Error>> {
         let rec = self.get_recette_by_title(titre_recette)?;
-        let cagette_dir = rec.create_cagette_dir(format!("{}/{}", self.path, DATA_DIR_CAGETTES))?;
+        let collection_dir = rec.create_collection_dir(self.get_data_dir_cagettes())?;
+        let cagette_dir = rec.create_cagette_dir(collection_dir)?;
         println!("Répertoire créé pour faire les courses:\n{}\n", &cagette_dir);
         for ingredient in rec.ingrédients.iter() {
             println!("nom: {}", ingredient);
             let _fichier_ingredient = ingredient.recolter_dans(&cagette_dir)?;
         }
+        println!("ÀFaire: copier la recette dans la cagette");
         Ok(true)
     }
 
@@ -137,8 +143,11 @@ impl RdMainConfig {
         println!("Date de parution: {}", rec.date);
         println!("");
         println!("{} Ingrédients :", rec.ingrédients.len());
+        let collection_path = rec.get_collection_dir(self.get_data_dir_cagettes())?;
+        let cagette_path = rec.get_cagette_dir(collection_path)?;
         for ingrédient in rec.ingrédients {
-            println!("{}", ingrédient); // À faire : indiquer si l'ingrédient est téléchargé et valide
+            let status = ingrédient.get_image_status(&cagette_path)?;
+            println!("{} -> {}", ingrédient, status); // À faire : indiquer si l'ingrédient est valide
         }
         Ok(true)
     }
