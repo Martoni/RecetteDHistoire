@@ -5,13 +5,77 @@ use std::fmt;
 use std::process::Command;
 use std::path::Path;
 use serde::{Deserialize, Serialize};
-
-use crate::rdmain::recette::{FormatTypes, SourceTypes};
 use crate::rdsound::cdaudio::*;
- 
+
+/* status de l'ingrédient */
+pub enum StatusIngrédient {
+    // L'ingrédient n'est pas téléchargé
+    Absent,
+    // L'ingrédient est téléchargé mais il y a un problème (message)
+    Cagette(String),
+    // L'ingrédient est téléchargé et valide
+    Valide,
+}
+
+impl fmt::Display for StatusIngrédient {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            StatusIngrédient::Absent => write!(f, "Absent"),
+            StatusIngrédient::Cagette(msg) => write!(f, "Présent : {}", msg),
+            StatusIngrédient::Valide => write!(f, "Valide"),
+        }
+    }
+}
+
+
+/// Type de source à aller chercher
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub enum SourceTypes {
+    Url,
+    Cdaudio
+}
+
+// Format de la source
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub enum FormatTypes {
+    Cdaudio,
+    Mp3,
+    Webp,
+    Jpeg,
+    Png,
+}
+
+impl FormatTypes {
+    // Donne l'extension du format de fichier
+    pub fn extension(&self) -> String {
+        match self {
+            FormatTypes::Cdaudio => "au".to_string(),
+            FormatTypes::Mp3 => "mp3".to_string(),
+            FormatTypes::Jpeg => "jpg".to_string(),
+            FormatTypes::Webp => "webp".to_string(),
+            FormatTypes::Png => "png".to_string(),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub enum MediaType {
+    Image,
+    Son,
+}
+
+impl fmt::Display for MediaType {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            MediaType::Image => write!(formatter, "Image"),
+            MediaType::Son => write!(formatter, "Son"),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Ingredients {
-    pub media_type: String,
+    pub media_type: MediaType,
     pub nom: String,
     pub format: Option<FormatTypes>,
     pub source: SourceTypes,
@@ -26,14 +90,56 @@ pub struct Ingredients {
 impl fmt::Display for Ingredients {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{} ({})", self.nom, self.media_type)
-    } 
+    }
 }
 
 impl Ingredients {
 
-    fn télécharger_dans(&self, dir_path: &String) -> Result<String, Box<dyn Error>> {
+    /* Fonction «générique» qui permet de récolter le média en fonction
+     * du type de source */
+    pub fn recolter_dans(&self, cagette_path: &String)
+            -> Result<String, Box<dyn Error>> {
+        match self.source {
+            SourceTypes::Url => {self.télécharger_dans(cagette_path)}
+            SourceTypes::Cdaudio => {self.ripper_cd_dans(cagette_path.to_string())}
+        }
+    }
+
+    /* Status du media */
+    pub fn status(&self, cagette_path: &String)
+            -> Result<StatusIngrédient, Box<dyn Error>> {
+        match self.media_type {
+            MediaType::Image => {self.get_image_status(cagette_path)}
+            MediaType::Son => {self.get_sound_status(cagette_path)}
+//            _ => Ok(StatusIngrédient::Absent)
+        }
+    }
+
+    pub fn get_image_status(&self, recette_path: &String)
+            -> Result<StatusIngrédient, Box<dyn Error>> {
+        let image_path = format!("{}/{}.{}",
+                                 recette_path,
+                                 self.nom,
+                                 self.format.as_ref().ok_or("No format")?.extension());
+        let b = Path::new(&image_path).exists();
+        if !b {
+            return Ok(StatusIngrédient::Absent);
+        }
+        // TODO: vérifier le md5sum
+        Ok(StatusIngrédient::Valide)
+    }
+
+    pub fn get_sound_status(&self, _recette_path: &String)
+            -> Result<StatusIngrédient, Box<dyn Error>> {
+        println!("ÀFAIRE: status des sons");
+        Ok(StatusIngrédient::Absent)
+    }
+
+    /* Si la source du média est une URL on la télécharge */
+    fn télécharger_dans(&self, cagette_path: &String)
+            -> Result<String, Box<dyn Error>> {
        if let Some(surl) = &self.url {
-           let filepath = Path::new(&dir_path)
+           let filepath = Path::new(&cagette_path)
                .join(self.nom.to_owned() +
                "." +
                &self.format.as_ref().ok_or("No format")?.extension());
@@ -49,7 +155,9 @@ impl Ingredients {
        }
     }
 
-    fn ripper_cd_dans(&self, dir_path: String)
+    /* si la source du média est un CD audio, on le rip
+     * et on le converti en mp3 */
+    fn ripper_cd_dans(&self, cagette_path: String)
                     -> Result<String, Box<dyn Error>> {
         // On vérifie d'abord que le cd présent dans le lecteur est le bon
         if self.discid == None {
@@ -81,17 +189,10 @@ impl Ingredients {
 
         // on rippe le cd en wave dans le répertoire /tmp/
         let _ripwave = cdtoc.rip2wave("/tmp".to_string())?;
-
         // on converti les fichiers en mp3 dans la cagette
-        let _wav2mp3 = cdtoc.save2mp3("/tmp".to_string(), dir_path)?;
+        let _wav2mp3 = cdtoc.save2mp3("/tmp".to_string(), cagette_path)?;
 
         Ok("ok".into())
     }
 
-    pub fn recolter_dans(&self, dir_path: &String) -> Result<String, Box<dyn Error>> {
-        match self.source {
-            SourceTypes::Url => {self.télécharger_dans(dir_path)}
-            SourceTypes::Cdaudio => {self.ripper_cd_dans(dir_path.to_string())}
-        }
-    }
 }
