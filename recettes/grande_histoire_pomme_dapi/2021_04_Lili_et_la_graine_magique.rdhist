@@ -7,13 +7,13 @@ numéro: 662
 codebarre: 3780237705950
 
 ingrédients:
-    - media_type: son
+    - media_type: Son
       nom: histoire_principale
       format: Mp3
       source: Url
       url: http://audio.ausha.co/bllDMIzvMGL2.mp3
       md5sum: 733cda09a906687704d9275f6d2affe0 
-    - media_type: image
+    - media_type: Image
       nom: illustration_podcast
       format: Jpeg
       source: Url

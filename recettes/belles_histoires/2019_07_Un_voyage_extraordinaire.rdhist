@@ -6,14 +6,14 @@ collection: Les belles histoires
 numéro: 559
 
 ingrédients:
-    - media_type: image
+    - media_type: Image
       nom: dos 
       url: https://www.belleshistoires.com/wp-content/uploads/sites/35/2019/06/BHIN0559-COUV_OK.jpg
       dimension: 588x665
       format: Jpeg
       source: Url
       md5sum: eface513b19967ccc307f30f016a07b0
-    - media_type: son
+    - media_type: Son
       nom: histoire_principale
       format: Mp3 
       source: Cdaudio

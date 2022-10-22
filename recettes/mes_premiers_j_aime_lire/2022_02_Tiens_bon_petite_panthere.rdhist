@@ -7,14 +7,14 @@ numéro: 234
 codebarre: 3780291405957
 
 ingrédients:
-    - media_type: image
+    - media_type: Image
       nom: couverture
       url: https://i.hello-merlin.com/insecure/fill/180/0/ce/1/plain/https://static.bayard.io/presse/audio/MPRN0234/MPRN0234_Couv.png
       dimension: 180x180
       format: Png 
       source: Url
       md5sum: 8b2d423e9ba4363f9cd1b26e53dbea27
-    - media_type: son
+    - media_type: Son
       nom: histoire_principale
       format: Mp3
       source: Cdaudio

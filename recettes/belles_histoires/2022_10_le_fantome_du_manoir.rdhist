@@ -7,14 +7,14 @@ numéro: 598
 codebarre: 3780115806502
 
 ingrédients:
-    - media_type: image
+    - media_type: Image
       nom: couverture
       url: https://www.belleshistoires.com/wp-content/uploads/sites/35/2022/09/BHI-couv-octobre-2022.jpg
       dimension: 700x770
       format: Jpeg
       source: Url
       md5sum: 6817b81f948c7991422af1659fbeff11
-    - media_type: son
+    - media_type: Son
       nom: histoire_principale
       format: Mp3
       source: Cdaudio

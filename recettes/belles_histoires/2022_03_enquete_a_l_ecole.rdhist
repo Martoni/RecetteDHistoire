@@ -6,14 +6,14 @@ collection: Les belles histoires
 numéro: 591
 
 ingrédients:
-    - media_type: image
+    - media_type: Image
       nom: couverture
       url: https://www.belleshistoires.com/wp-content/uploads/sites/35/2022/02/BHI-couv-volume.jpg 
       dimension: 700x770
       format: Jpeg
       source: Url
       md5sum: 652a935d15e1bc3b7fdb8c97379fc0fe
-    - media_type: son
+    - media_type: Son
       nom: histoire_principale
       format: Mp3
       source: Cdaudio
