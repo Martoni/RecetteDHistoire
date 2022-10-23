@@ -5,7 +5,11 @@ use std::fmt;
 use std::process::Command;
 use std::path::Path;
 use serde::{Deserialize, Serialize};
+use md5::{Digest};
+
 use crate::rdsound::cdaudio::*;
+
+const CD_TRACK_FILENAME: &str = "track";
 
 /* status de l'ingrédient */
 pub enum StatusIngrédient {
@@ -111,7 +115,6 @@ impl Ingredients {
         match self.media_type {
             MediaType::Image => {self.get_image_status(cagette_path)}
             MediaType::Son => {self.get_sound_status(cagette_path)}
-//            _ => Ok(StatusIngrédient::Absent)
         }
     }
 
@@ -125,14 +128,43 @@ impl Ingredients {
         if !b {
             return Ok(StatusIngrédient::Absent);
         }
+        // TODO: vérifier les dimensions
         // TODO: vérifier le md5sum
         Ok(StatusIngrédient::Valide)
     }
 
-    pub fn get_sound_status(&self, _recette_path: &String)
+    fn verifier_fichier_son_d_url(&self, recette_path: &String)
             -> Result<StatusIngrédient, Box<dyn Error>> {
-        println!("ÀFAIRE: status des sons");
-        Ok(StatusIngrédient::Absent)
+                Ok(StatusIngrédient::Valide)
+    }
+
+    fn verifier_fichier_son_cdaudio(&self, recette_path: &String)
+            -> Result<StatusIngrédient, Box<dyn Error>> {
+        for track_num in 1..=self.tracks.as_ref().ok_or("No tracks")?.len() {
+            let image_path = format!("{}/{}{:02}.{}",
+                recette_path,
+                CD_TRACK_FILENAME,
+                track_num,
+                self.format.as_ref().ok_or("No format")?.extension());
+            let b = Path::new(&image_path).exists();
+            if !b {
+                if track_num == 1 {
+                    return Ok(StatusIngrédient::Absent);
+                } else {
+                    return Ok(StatusIngrédient::Cagette(format!("Piste {} manquante", track_num)));
+                }
+            }
+        }
+                Ok(StatusIngrédient::Valide)
+    }
+
+    pub fn get_sound_status(&self, recette_path: &String)
+            -> Result<StatusIngrédient, Box<dyn Error>> {
+        let result = match self.source {
+            SourceTypes::Url => {self.verifier_fichier_son_d_url(recette_path)},
+            SourceTypes::Cdaudio => {self.verifier_fichier_son_cdaudio(recette_path)},
+        };
+        result
     }
 
     /* Si la source du média est une URL on la télécharge */

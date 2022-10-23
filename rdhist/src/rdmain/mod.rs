@@ -147,7 +147,7 @@ impl RdMainConfig {
         let collection_path = rec.get_collection_dir(self.get_data_dir_cagettes())?;
         let cagette_path = rec.get_cagette_dir(collection_path)?;
         for ingrédient in rec.ingrédients {
-            let status = ingrédient.get_image_status(&cagette_path)?;
+            let status = ingrédient.status(&cagette_path)?;
             println!("{} -> {}", ingrédient, status); // À faire : indiquer si l'ingrédient est valide
         }
         Ok(true)
