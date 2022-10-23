@@ -135,18 +135,28 @@ impl Ingredients {
 
     fn verifier_fichier_son_d_url(&self, recette_path: &String)
             -> Result<StatusIngrédient, Box<dyn Error>> {
-                Ok(StatusIngrédient::Valide)
+
+        let track_path = format!("{}/{}.{}",
+            recette_path,
+            self.nom,
+            self.format.as_ref().ok_or("No format")?.extension());
+
+        let b = Path::new(&track_path).exists();
+        if !b {
+            return Ok(StatusIngrédient::Absent);
+        }
+        Ok(StatusIngrédient::Valide)
     }
 
     fn verifier_fichier_son_cdaudio(&self, recette_path: &String)
             -> Result<StatusIngrédient, Box<dyn Error>> {
         for track_num in 1..=self.tracks.as_ref().ok_or("No tracks")?.len() {
-            let image_path = format!("{}/{}{:02}.{}",
+            let track_path = format!("{}/{}{:02}.{}",
                 recette_path,
                 CD_TRACK_FILENAME,
                 track_num,
                 self.format.as_ref().ok_or("No format")?.extension());
-            let b = Path::new(&image_path).exists();
+            let b = Path::new(&track_path).exists();
             if !b {
                 if track_num == 1 {
                     return Ok(StatusIngrédient::Absent);
