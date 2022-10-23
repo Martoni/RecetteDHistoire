@@ -24,6 +24,7 @@ pub struct Opération {
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Recette {
+    pub ftype: String,
     pub titre: String,
     pub date: String,
     pub collection: String,
@@ -35,11 +36,19 @@ pub struct Recette {
 
 impl Recette {
     pub fn new(filename: String) -> Result<Recette, Box<dyn Error>> {
-        let rawcontent = std::fs::read_to_string(filename)?;
-        let yrecette = serde_yaml::from_str(&rawcontent)?;
-        Ok(yrecette)
+        let rawcontent = std::fs::read_to_string(&filename)?;
+        let yaml_ret = serde_yaml::from_str(&rawcontent);
+        let yrecette: Recette = match yaml_ret {
+            Ok(recette) => recette,
+            Err(msg) => return Err(format!("\t\n    Erreur dans le fichier {}:\t\n {}",
+                                           &filename, msg).into()),
+        };
+        if !yrecette.ftype.eq("Recette") {
+            Err(format!("{} n'est pas un fichier de recette ({})", filename, yrecette.ftype).into())
+        } else {
+            Ok(yrecette)
+        }
     }
-
     
     pub fn get_collection_dir(&self, dir_path: String) -> Result<String, Box<dyn Error>> {
         let mut collection_dir: String = String::from(&dir_path);

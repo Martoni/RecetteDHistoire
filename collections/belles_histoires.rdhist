@@ -1,0 +1,32 @@
+%YAML 1.2
+---
+ftype: Collection
+collection: Les belles histoires
+
+ingrédients:
+  - media_type: Image
+    nom: couverture
+    url: https://www.belleshistoires.com/wp-content/themes/belleshistoires/images/brand-logo.png
+    dimension: 341x106
+    source: Url
+  - media_type: Son
+    nom: histoire_principale
+    titre: Le fantôme du manoir
+    format: Mp3
+    temps_debut:
+    temps_fin:
+    source: Cdaudio
+    temps: 461.34 
+    discid: 7a01cd0b 11 150 5768 8451 11949 14395 16973 20654 23114 25846 28378 32032 463
+    tracks:
+      - 74.68
+      - 35.58
+      - 46.48
+      - 32.46
+      - 34.28
+      - 49.06
+      - 32.60
+      - 36.32
+      - 33.57
+      - 48.54
+      - 36.27

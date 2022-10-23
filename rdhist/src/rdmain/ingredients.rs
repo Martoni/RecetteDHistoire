@@ -5,7 +5,6 @@ use std::fmt;
 use std::process::Command;
 use std::path::Path;
 use serde::{Deserialize, Serialize};
-use md5::{Digest};
 
 use crate::rdsound::cdaudio::*;
 
