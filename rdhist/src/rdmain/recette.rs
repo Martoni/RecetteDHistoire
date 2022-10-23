@@ -1,8 +1,8 @@
 extern crate serde;
 
-/// Description du format de fichier pour les cahiers de recette
-/// Un fichier de recette porte l'extension `.rdhist` et est au
-/// format yaml
+// Description du format de fichier pour les cahiers de recette
+// Un fichier de recette porte l'extension `.rdhist` et est au
+// format yaml
 
 use std::fs;
 use std::error::Error;

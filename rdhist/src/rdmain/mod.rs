@@ -10,6 +10,7 @@ pub mod ingredients;
 pub mod rdhistcli;
 pub mod rdhisthelper;
 pub mod outils;
+pub mod noeud_menu;
 pub mod test_recette;
 
 use crate::rdappareils;

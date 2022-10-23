@@ -30,7 +30,6 @@ impl fmt::Display for StatusIngrédient {
     }
 }
 
-
 /// Type de source à aller chercher
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum SourceTypes {

@@ -1,7 +1,18 @@
 %YAML 1.2
 ---
-ftype: Collection
+ftype: NoeudMenu
 collection: Les belles histoires
+
+titre_image:
+  - nom: couverture
+    position: 10x10
+    facteur_redimension: 1
+
+titre_son:
+  - nom: histoire_principale
+    position_debut: 16.90
+    position_fin: 18.10
+    track_num: 1
 
 ingrédients:
   - media_type: Image
@@ -13,8 +24,6 @@ ingrédients:
     nom: histoire_principale
     titre: Le fantôme du manoir
     format: Mp3
-    temps_debut:
-    temps_fin:
     source: Cdaudio
     temps: 461.34 
     discid: 7a01cd0b 11 150 5768 8451 11949 14395 16973 20654 23114 25846 28378 32032 463
