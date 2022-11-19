@@ -12,21 +12,26 @@ pub mod rdhisthelper;
 pub mod outils;
 pub mod noeud_menu;
 pub mod test_recette;
+pub mod test_rdmain;
 
 use crate::rdappareils;
 
 use rdhistcli::RdhistCli;
 use recette::Recette;
+use noeud_menu::NoeudMenu;
 
 const DATA_DIR_PATH: &str = ".local/share/rdhist";
 const DATA_DIR_RECETTES: &str = "recettes";
+const DATA_DIR_NOEUDS: &str = "noeuds";
 const DATA_DIR_CAGETTES: &str = "cagettes";
 const _DATA_DIR_SERVICES: &str = "services";
 const RDHIST_EXT: &str = "rdhist";
 
 /* commandes */
+/* TODO: liste <type> (liste recette, liste appareil, ...) */ 
 pub const CMD_LISTE_RECETTES: &str  = "listrec";
 pub const CMD_LISTE_APPAREILS: &str = "listapp";
+pub const CMD_LISTE_NOEUDS: &str = "listnoeuds";
 pub const CMD_RECOLTER: &str = "recolter";
 pub const CMD_INFORECETTE: &str = "inforec";
 pub const CMD_SERVIR: &str = "servir";
@@ -62,6 +67,29 @@ impl RdMainConfig {
             recette_titre,
             ..self
         }
+    }
+
+    pub fn list_noeuds(&self) -> Result<String, Box<dyn Error>> {
+        let mut noeudslist: Vec<NoeudMenu> = vec![];
+        let noeuds_dir = format!("{}/{}", &self.path, DATA_DIR_NOEUDS);
+        for file in fs::read_dir(&noeuds_dir)? {
+            let file = file?;
+            let path = file.path();
+            if path.is_dir() {
+                for subfile in fs::read_dir(path)? {
+                    let rfilepath = subfile?.path().display().to_string();
+                    if recette::recette_ext_check(&rfilepath) {
+                        noeudslist.push(NoeudMenu::new(rfilepath)?);
+                    }
+                }
+            } else {
+                let rfilepath = file.path().display().to_string();
+                if recette::recette_ext_check(&rfilepath) {
+                    noeudslist.push(NoeudMenu::new(rfilepath)?);
+                }
+            }
+        }
+        Ok(noeuds_dir)
     }
 
     pub fn get_list_files_recettes(&self) -> Result<Vec<Recette>, Box<dyn Error>> {

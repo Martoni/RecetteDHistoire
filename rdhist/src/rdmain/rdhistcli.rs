@@ -9,8 +9,9 @@ use rustyline::completion::FilenameCompleter;
 use crate::rdmain::rdhisthelper::{RdHistHelper, rdhist_hints};
 use crate::rdmain::Error;
 use crate::rdmain::RdMainConfig;
-use crate::rdmain::{CMD_LISTE_APPAREILS,
-                    CMD_LISTE_RECETTES,
+use crate::rdmain::{CMD_LISTE_RECETTES,
+                    CMD_LISTE_APPAREILS,
+                    CMD_LISTE_NOEUDS,
                     CMD_SERVIR,
                     CMD_INFORECETTE,
                     CMD_RECOLTER};
@@ -23,8 +24,9 @@ pub const LIST_CMD: &'static [&'static str] = &[
     "exit",
     "help",
     CMD_INFORECETTE,
-    CMD_LISTE_APPAREILS,
     CMD_LISTE_RECETTES,
+    CMD_LISTE_APPAREILS,
+    CMD_LISTE_NOEUDS,
     CMD_RECOLTER,
     CMD_SERVIR];
 
@@ -79,10 +81,12 @@ impl RdhistCli {
                                 let _ = &self.help()?;}
                             CMD_INFORECETTE => {
                                 let _ = &self.inforecette(args)?;}
-                            CMD_LISTE_RECETTES => {
-                                let _ = &self.list()?;}
                             CMD_LISTE_APPAREILS => {
                                 let _ = &self.list_appareils()?;}
+                            CMD_LISTE_RECETTES => {
+                                let _ = &self.list_recettes()?;}
+                            CMD_LISTE_NOEUDS => {
+                                let _ = &self.list_noeuds()?;}
                             CMD_RECOLTER => {
                                 let _ = &self.recolter(args)?;}
                             CMD_SERVIR => {
@@ -110,6 +114,12 @@ impl RdhistCli {
     }
 
     // commandes
+    
+    fn help(&self) -> Result<(), Box<dyn Error>>{
+         println!("Liste des commandes disponibles:\r\n{}\r\n",
+                    LIST_CMD.join("\r\n"));
+        Ok(())
+    }
 
     fn inforecette(&self, args: Vec<String>) -> Result<(), Box<dyn Error>>{
         let ret = self.maincfg.info_recette(&args[1].to_string());
@@ -120,15 +130,9 @@ impl RdhistCli {
         Ok(())
     }
 
-    fn list(&self) -> Result<(), Box<dyn Error>>{
+    fn list_recettes(&self) -> Result<(), Box<dyn Error>>{
         let ret = self.maincfg.afficher_recettes_disponibles()?;
         println!("{}", &ret);
-        Ok(())
-    }
-
-    fn help(&self) -> Result<(), Box<dyn Error>>{
-         println!("Liste des commandes disponibles:\r\n{}\r\n",
-                    LIST_CMD.join("\r\n"));
         Ok(())
     }
 
@@ -137,6 +141,15 @@ impl RdhistCli {
         match ret {
             Ok(ret) => {println!("{}", &ret)},
             Err(msg) =>{println!("Erreur: {}", &msg)},
+        }
+        Ok(())
+    }
+
+    fn list_noeuds(&self) -> Result<(), Box<dyn Error>>{
+        let ret = self.maincfg.list_noeuds();
+        match ret {
+            Ok(ret) => {println!("{}", &ret)},
+            Err(msg) => {println!("Erreur: {}", &msg)},
         }
         Ok(())
     }
