@@ -1,5 +1,6 @@
 extern crate serde;
 
+use std::fmt;
 use std::error::Error;
 use serde::{Deserialize, Serialize};
 
@@ -24,10 +25,16 @@ impl NoeudMenu {
             Err(msg) => return Err(format!("\t\n    Erreur dans le fichier {}:\t\n {}",
                                            &filename, msg).into()),
         };
-        if !ynoeud.ftype.eq("Recette") {
+        if !ynoeud.ftype.eq("NoeudMenu") {
             Err(format!("{} n'est pas un fichier de noeud ({})", filename, ynoeud.ftype).into())
         } else {
             Ok(ynoeud)
         }
+    }
+}
+
+impl fmt::Display for NoeudMenu {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Collection : {}", &self.collection)
     }
 }

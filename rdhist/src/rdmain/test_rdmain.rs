@@ -20,7 +20,7 @@ mod test_rdmain {
                     .expect("Impossible de créer une configuration RdMainConfig");
         let liste_noeuds = cfg.list_noeuds()
                               .expect("Impossible de lire la liste des nœuds");
-        println!("{:?}", liste_noeuds);
+        println!("Liste de nœuds trouvée: {:?}", liste_noeuds);
         assert!(true);
     } 
 }

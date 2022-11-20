@@ -148,7 +148,7 @@ impl RdhistCli {
     fn list_noeuds(&self) -> Result<(), Box<dyn Error>>{
         let ret = self.maincfg.list_noeuds();
         match ret {
-            Ok(ret) => {println!("{}", &ret)},
+            Ok(ret) => {for noeud in &ret {println!("{}", &noeud)}},
             Err(msg) => {println!("Erreur: {}", &msg)},
         }
         Ok(())

@@ -69,7 +69,7 @@ impl RdMainConfig {
         }
     }
 
-    pub fn list_noeuds(&self) -> Result<String, Box<dyn Error>> {
+    pub fn list_noeuds(&self) -> Result<Vec<NoeudMenu>, Box<dyn Error>> {
         let mut noeudslist: Vec<NoeudMenu> = vec![];
         let noeuds_dir = format!("{}/{}", &self.path, DATA_DIR_NOEUDS);
         for file in fs::read_dir(&noeuds_dir)? {
@@ -89,7 +89,7 @@ impl RdMainConfig {
                 }
             }
         }
-        Ok(noeuds_dir)
+        Ok(noeudslist)
     }
 
     pub fn get_list_files_recettes(&self) -> Result<Vec<Recette>, Box<dyn Error>> {
